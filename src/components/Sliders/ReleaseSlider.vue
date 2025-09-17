@@ -1,10 +1,14 @@
 <template>
   <swiper
+    :modules="modules"
     :slides-per-view="getSlidesPerView"
     :space-between="20"
-    :loop="true"
-    :autoplay="{ delay: 2500, disableOnInteraction: false }"
-    class="release__slider-inner"
+    :loop="false"
+    :navigation="{ nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }"
+    :pagination="false"
+    :scrollbar="{ draggable: true }"
+    :autoplay="{delay: 3000, disableOnInteraction: false}"
+    class="release__slider-inner mb-[78px]"
   >
     <swiper-slide v-for="(item, index) in filmsData" :key="index">
       <div class="release__slider-item relative rounded-[10px]">
@@ -18,8 +22,9 @@
           <div class="overflow-hidden text-ellipsis max-h-[45%]">
             {{ item.overview }}
           </div>
-          <div class="release__slider-action absolute bottom-[23px]">
+          <div class="release__slider-action flex gap-[6px] absolute bottom-[23px]">
             <button-info/>
+            <button-like class="bg-[#053BA3]"/>
           </div>
         </div>
         <img
@@ -29,32 +34,57 @@
         />
       </div>
     </swiper-slide>
+
+    <div class="swiper-button-next !w-[40px] !h-[40px]">
+      <button-next/>
+    </div>
+    <div class="swiper-button-prev !w-[40px] !h-[40px]">
+      <button-prev/>
+    </div>
   </swiper>
 </template>
 
 <script>
-import buttonInfo from "@/components/UI/buttonInfo"
+import { computed } from "vue";
+
+import buttonInfo from "@/components/UI/buttonInfo";
+import buttonLike from "@/components/UI/buttonLike";
+import buttonPrev from "@/components/UI/buttonPrev";
+import buttonNext from "@/components/UI/buttonNext";
+
+// import Swiper core and required modules
+import { Navigation, Scrollbar, Autoplay, A11y } from 'swiper/modules';
+
+// Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from "swiper/vue";
+
+// Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/autoplay";
 
 export default {
   components: {
     Swiper,
     SwiperSlide,
-    buttonInfo
+    buttonInfo,
+    buttonLike,
+    buttonPrev,
+    buttonNext
   },
   props: {
     filmsData: {
       type: Array,
     },
   },
-  computed: {
-    getSlidesPerView() {
+  setup() {
+    const getSlidesPerView = computed(() => {
       return window.innerWidth > 768 ? 2 : 1;
-    },
+    });
+
+    return {
+      getSlidesPerView,
+      modules: [Navigation, Scrollbar, Autoplay, A11y],
+    };
   },
 };
 </script>
