@@ -15,23 +15,7 @@
     >
       <!-- :autoplay="{delay: 3000, disableOnInteraction: false}" -->
       <swiper-slide v-for="(item, index) in filmsData" :key="index">
-        <div class="app__slider-item relative h-[380px] w-[265px] rounded-[10px] transition-transform duration-300 ease-in-out hover:translate-y-[-10px]">
-          <div class="app__slider-desc absolute pt-[7px] pr-[12px] pb-[18px] pl-[4px] w-full min-h-[20%] bottom-0 bg-[rgba(16,16,16,0.30)] backdrop-blur-[2px] opacity-0">
-            <div class="app__slider-top flex items-start justify-between">
-              <h3 class="app__slider-title font-contrast text-[25px] font-normal">{{ item.original_title }}</h3>
-              <button-like/>
-            </div>
-            <div class="app__slider-date">
-              {{ getYearItem(item) }}
-            </div>
-            <button-info class="float-right"/>
-          </div>
-          <img 
-            class="app__slider-img w-full h-full object-cover rounded-[10px]"
-            :src="'https://image.tmdb.org/t/p/original' + item.backdrop_path"
-            alt=""
-          >
-        </div>
+        <media-card :item="item"/>
       </swiper-slide>
 
       <div class="swiper-steps mt-[30px]"></div>
@@ -48,6 +32,9 @@
 
 <script>
 import { computed } from "vue";
+import buttonPrev from "@/components/UI/buttonPrev";
+import buttonNext from "@/components/UI/buttonNext";
+import MediaCard from "@/components/cards/MediaCard.vue"
 
 // import Swiper core and required modules
 import { Navigation, Pagination, Scrollbar, Autoplay, A11y } from 'swiper/modules';
@@ -61,19 +48,13 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 
-import buttonInfo from '../UI/buttonInfo.vue';
-import buttonLike from '../UI/buttonLike.vue';
-import buttonPrev from "@/components/UI/buttonPrev";
-import buttonNext from "@/components/UI/buttonNext";
-
 export default {
   components: {
     Swiper,
     SwiperSlide,
-    buttonInfo,
-    buttonLike,
     buttonPrev,
-    buttonNext
+    buttonNext,
+    MediaCard
   },
   props: {
     filmsData: {
@@ -101,30 +82,9 @@ export default {
       modules: [Navigation, Pagination, Scrollbar, Autoplay, A11y],
     };
   },
-  methods: {
-    getYearItem(item) {
-      return item?.release_date ? item.release_date.split('-')[0] : 'In release';
-    }
-  }
 };
 </script>
 
 <style scoped>
-@keyframes scale-in-ver-bottom {
-  0% {
-    transform: scaleY(0);
-    transform-origin: 0% 100%;
-    opacity: 1;
-  }
-  100% {
-    transform: scaleY(1);
-    transform-origin: 0% 100%;
-    opacity: 1;
-  }
-}
 
-.swiper-slide-active .app__slider-desc,
-.app__slider-item:hover .app__slider-desc {
-  animation: scale-in-ver-bottom 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-}
 </style>
