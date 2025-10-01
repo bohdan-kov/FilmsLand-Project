@@ -17,7 +17,9 @@
 
     <div class="nav__bar-control flex gap-[32px]">
       <img src="@/assets/images/icons/search.svg" alt="search-icon">
-      <img src="@/assets/images/icons/user.png" alt="">
+      <router-link to="/authorization/login">
+        <img src="@/assets/images/icons/user.png" alt="">
+      </router-link>
     </div>
   </div>
 </template>

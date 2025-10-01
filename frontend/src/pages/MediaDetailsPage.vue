@@ -119,10 +119,15 @@
                 {{ detailsFilmsData.tagline }}
               </div>
 
-              <div class="media-details-overview mt-[10px] max-w-[800px]">
+              <div class="media-details-overview mt-[10px] max-w-[800px] mb-[30px]">
                 <span class="block font-bold mb-[5px]">Overview</span>
                 {{ detailsFilmsData.overview }}
               </div>
+
+              <button-prev 
+                @click="backPage"
+                class="transition-all duration-300 hover:-translate-x-[10px]"
+              />
             </div>
           </div>
         </div>
@@ -134,16 +139,21 @@
 
 <script>
 import { ref, onMounted, onUnmounted, computed } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import NavBar from "@/components/sections/NavBar.vue";
 import HomeFooter from "@/components/sections/HomeFooter.vue";
 import { getDetailsMovies } from "@/services/movieService";
 import StarRating from "vue-star-rating";
 
+import buttonPrev from "@/components/UI/buttonPrev";
+
+
 export default {
-  components: { NavBar, HomeFooter, StarRating },
+  components: { NavBar, HomeFooter, StarRating, buttonPrev },
   setup() {
+    const router = useRouter();
     const route = useRoute();
+
     const detailsFilmsData = ref({});
 
     const movieId = route.params.id;
@@ -194,6 +204,10 @@ export default {
       }
     };
 
+    const backPage = () => {
+      router.back()
+    }
+ 
     fetchAPI(getDetailsMovies, detailsFilmsData);
 
     return {
@@ -201,6 +215,7 @@ export default {
       navTop,
       getReleaseYear,
       getDurationMedia,
+      backPage
     };
   },
 };

@@ -23,7 +23,7 @@
             {{ item.overview }}
           </div>
           <div class="release__slider-action flex gap-[6px] absolute bottom-[23px]">
-            <button-info/>
+            <button-info @click="openMediaDetails(item.id)"/>
             <button-like class="bg-[#053BA3]"/>
           </div>
         </div>
@@ -57,6 +57,8 @@ import { Navigation, Scrollbar, Autoplay, A11y } from 'swiper/modules';
 
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from "swiper/vue";
+import { useRouter } from "vue-router";
+
 
 // Import Swiper styles
 import "swiper/css";
@@ -77,13 +79,20 @@ export default {
     },
   },
   setup() {
+    const router = useRouter();
+    
     const getSlidesPerView = computed(() => {
       return window.innerWidth > 768 ? 2 : 1;
     });
 
+    const openMediaDetails = (mediaId) => {
+      router.push(`/media-details/${mediaId}`)
+    } 
+
     return {
       getSlidesPerView,
       modules: [Navigation, Scrollbar, Autoplay, A11y],
+      openMediaDetails
     };
   },
 };
