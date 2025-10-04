@@ -10,8 +10,12 @@
         <li class="nav__bar-item">
           <router-link to="/discover-films">Discover Films</router-link>
         </li>
-        <li class="nav__bar-item">Latest Films</li>
-        <li class="nav__bar-item">My List</li>
+        <li class="nav__bar-item">
+          <router-link to="/authorization/login">Latest Films</router-link>
+        </li>
+        <li class="nav__bar-item">
+          <router-link to="/authorization/login">My List</router-link>
+        </li>
       </ul>
     </nav>
 

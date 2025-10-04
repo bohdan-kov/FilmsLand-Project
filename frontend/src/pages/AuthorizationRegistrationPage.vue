@@ -16,60 +16,136 @@
               <p class="text-center text-2xl font-bold">Sign Up</p>
               <form class="mt-6">
                 <div class="mt-4">
-                  <label for="email" class="block text-sm text-gray-400 mb-1"
+                  <label class="block text-sm text-gray-400 mb-1"
                     >Email</label
                   >
-                  <input
-                    v-model="email"
-                    type="email"
-                    name="email"
-                    id="email"
-                    placeholder="your@email.com"
-                    class="w-full rounded-md border border-gray-700 bg-gray-900 py-3 px-4 text-gray-100 focus:border-violet-400 outline-none"
-                  />
+                  <div class="registration__input-box relative">
+                    <input
+                      v-model="email"
+                      type="email"
+                      placeholder="your@email.com"
+                      autocomplete="new-email"
+                      class="w-full rounded-md border border-gray-700 bg-gray-900 py-3 px-4 text-gray-100 focus:border-violet-400 outline-none"
+                    />
+                    <svg v-if="isEmailValid" class="w-[25px] absolute right-[5px] bottom-0 -translate-y-1/2 top-[50%]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                      <g
+                        id="SVGRepo_tracerCarrier"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></g>
+                      <g id="SVGRepo_iconCarrier">
+                        <path
+                          d="M5 14L8.23309 16.4248C8.66178 16.7463 9.26772 16.6728 9.60705 16.2581L18 6"
+                          stroke="#053ba3"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        ></path>
+                      </g>
+                    </svg>
+                  </div>
+                  <label v-if="!isEmailValid && inputEmailError" for="confirm_password" class="block text-sm text-[#ff00009e] mb-1">
+                    {{ inputEmailError }}
+                  </label>
                 </div>
                 <div class="mt-4">
-                  <label for="username" class="block text-sm text-gray-400 mb-1"
+                  <label class="block text-sm text-gray-400 mb-1"
                     >Username</label
                   >
-                  <input
-                    v-model="userName"
-                    type="text"
-                    name="username"
-                    id="username"
-                    placeholder=""
-                    class="w-full rounded-md border border-gray-700 bg-gray-900 py-3 px-4 text-gray-100 focus:border-violet-400 outline-none"
-                  />
+                  <div class="registration__input-box relative">
+                    <input
+                      v-model="userName"
+                      type="text"
+                      autocomplete="new-username"
+                      class="w-full rounded-md border border-gray-700 bg-gray-900 py-3 px-4 text-gray-100 focus:border-violet-400 outline-none"
+                    />
+                    <svg v-if="isUserNameValid" class="w-[25px] absolute right-[5px] bottom-0 -translate-y-1/2 top-[50%]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                      <g
+                        id="SVGRepo_tracerCarrier"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></g>
+                      <g id="SVGRepo_iconCarrier">
+                        <path
+                          d="M5 14L8.23309 16.4248C8.66178 16.7463 9.26772 16.6728 9.60705 16.2581L18 6"
+                          stroke="#053ba3"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        ></path>
+                      </g>
+                    </svg>
+                  </div>
+                  <label v-if="!isUserNameValid && inputUserNameError" for="confirm_password" class="block text-sm text-[#ff00009e] mb-1">
+                    {{ inputUserNameError }}
+                  </label>
                 </div>
                 <div class="mt-4">
                   <label for="password" class="block text-sm text-gray-400 mb-1"
                     >Password</label
                   >
-                  <input
-                    v-model="password"
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder=""
-                    class="w-full rounded-md border border-gray-700 bg-gray-900 py-3 px-4 text-gray-100 focus:border-violet-400 outline-none"
-                  />
+                  <div class="registration__input-box relative">
+                    <input
+                      v-model="password"
+                      type="password"
+                      autocomplete="new-password"
+                      class="w-full rounded-md border border-gray-700 bg-gray-900 py-3 px-4 text-gray-100 focus:border-violet-400 outline-none"
+                    />
+                    <svg v-if="isPasswordValid" class="w-[25px] absolute right-[5px] bottom-0 -translate-y-1/2 top-[50%]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                      <g
+                        id="SVGRepo_tracerCarrier"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></g>
+                      <g id="SVGRepo_iconCarrier">
+                        <path
+                          d="M5 14L8.23309 16.4248C8.66178 16.7463 9.26772 16.6728 9.60705 16.2581L18 6"
+                          stroke="#053ba3"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        ></path>
+                      </g>
+                    </svg>
+                  </div>
+                  <label v-if="!isPasswordValid && inputPasswordError" for="confirm_password" class="block text-sm text-[#ff00009e] mb-1">
+                    {{ inputPasswordError }}
+                  </label>
                 </div>
                 <div class="mt-4">
                   <label for="confirm_password" class="block text-sm text-gray-400 mb-1"
                     >Confirm Password</label
                   >
-                  <input
-                    v-model="passwordConfig"
-                    type="password"
-                    name="confirm_password"
-                    id="confirm_password"
-                    placeholder=""
-                    class="w-full rounded-md border border-gray-700 bg-gray-900 py-3 px-4 text-gray-100 focus:border-violet-400 outline-none"
-                  />
+                  <div class="registration__input-box relative">
+                    <input
+                      v-model="passwordConfig"
+                      type="password"
+                      autocomplete="new-passwordConfig"
+                      class="w-full rounded-md border border-gray-700 bg-gray-900 py-3 px-4 text-gray-100 focus:border-violet-400 outline-none"
+                    />
+                    <svg v-if="isPasswordConfigValid" class="w-[25px] absolute right-[5px] bottom-0 -translate-y-1/2 top-[50%]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                      <g
+                        id="SVGRepo_tracerCarrier"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></g>
+                      <g id="SVGRepo_iconCarrier">
+                        <path
+                          d="M5 14L8.23309 16.4248C8.66178 16.7463 9.26772 16.6728 9.60705 16.2581L18 6"
+                          stroke="#053ba3"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        ></path>
+                      </g>
+                    </svg>
+                  </div>
+                  <label v-if="!isPasswordConfigValid && inputPasswordConfigError" for="confirm_password" class="block text-sm text-[#ff00009e] mb-1">
+                    {{ inputPasswordConfigError }}
+                  </label>
                 </div>
                 <button
-                  @click="handleRegister"
-                  type="submit"
+                  @click.self.prevent="handleRegister"
                   class="block w-full bg-[#053BA3] p-3 text-center text-white rounded-md font-semibold hover:bg-[#04328A] focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 focus:ring-offset-[#12192C] mt-6"
                 >
                   Sign Up
@@ -146,21 +222,28 @@
 </template>
 
 <script>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, computed } from "vue";
+import { useRouter } from "vue-router";
 import NavBar from "@/components/sections/NavBar.vue";
 import bgImage from "@/assets/images/authorization-bg.jpg";
 import HomeFooter from "@/components/sections/HomeFooter.vue";
-import { register } from '@/services/authService';
+import { register } from "@/services/authService";
 
 export default {
   components: { NavBar, HomeFooter },
   setup() {
+    const router = useRouter();
     const navTop = ref(0);
-    const email = ref('')
-    const userName = ref('')
-    const password = ref('')
-    const passwordConfig = ref('')
 
+    const email = ref("");
+    const userName = ref("");
+    const password = ref("");
+    const passwordConfig = ref("");
+
+    const inputEmailError = ref("");
+    const inputUserNameError = ref("");
+    const inputPasswordError = ref("");
+    const inputPasswordConfigError = ref("");
 
     let lastScrollY = window.scrollY;
 
@@ -185,29 +268,63 @@ export default {
       window.removeEventListener("scroll", handleScroll);
     });
 
+    const isEmailValid = computed(() => email.value.length > 3 && email.value.includes("@"));
+    const isUserNameValid = computed(() => userName.value.length > 3);
+    const isPasswordValid = computed(() => password.value.length > 6);
+    const isPasswordConfigValid = computed(() => isPasswordValid.value && password.value === passwordConfig.value);
+
     const handleRegister = async () => {
+      if (!isEmailValid.value){
+        inputEmailError.value = 'Email address must be more than 3 characters and have the @ symbol'
+        return
+      }
+      if (!inputUserNameError.value){
+        inputUserNameError.value = 'Username must be more than 3 characters long'
+        return
+      }
+
+      if (!isPasswordValid.value){
+        inputPasswordError.value = 'Password must be more than 6 characters long'
+        return
+      }
+
+      if (!isPasswordConfigValid.value){
+        inputPasswordConfigError.value = 'Passwords must match'
+        return
+      }
+
       try {
         const formRegister = {
           email: email.value,
           name: userName.value,
-          password: password.value
-        }
+          password: password.value,
+        };
 
-        console.log('formRegister', formRegister);
-        
+        await register(formRegister);
 
-        await register(formRegister)
-
-        email.value = ''
-        userName.value = ''
-        password.value = ''
+        router.push('/authorization/login')
       } catch (error) {
         console.error(error);
       }
-    }
+    };
 
-
-    return { navTop, email, userName, password, passwordConfig, handleRegister, bgImage };
+    return { 
+       navTop,
+       email, 
+       userName, 
+       password, 
+       passwordConfig, 
+       handleRegister, 
+       isEmailValid, 
+       isUserNameValid, 
+       isPasswordValid, 
+       isPasswordConfigValid, 
+       inputEmailError,
+       inputUserNameError,
+       inputPasswordError, 
+       inputPasswordConfigError, 
+       bgImage 
+    };
   },
 };
 </script>

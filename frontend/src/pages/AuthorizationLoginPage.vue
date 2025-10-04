@@ -6,9 +6,7 @@
         backgroundImage: `url(${bgImage})`,
       }"
     ></div>
-    <div 
-      class="login__view-wrapper"
-    >
+    <div class="login__view-wrapper">
       <div class="page__container">
         <nav-bar :style="{ top: navTop + 'px' }" class="home__view--nav-bar" />
 
@@ -19,27 +17,74 @@
               <form class="mt-6">
                 <div class="mt-4">
                   <label for="username" class="block text-sm text-gray-400 mb-1"
-                    >Username</label
+                    >Email</label
                   >
-                  <input
-                    type="text"
-                    name="username"
-                    id="username"
-                    placeholder=""
-                    class="w-full rounded-md border border-gray-700 bg-gray-900 py-3 px-4 text-gray-100 focus:border-violet-400 outline-none"
-                  />
+                  <div class="register__inner-box relative">
+                    <input
+                      v-model="email"
+                      type="email"
+                      placeholder="your@email.com"
+                      autocomplete="new-email"
+                      class="w-full rounded-md border border-gray-700 bg-gray-900 py-3 px-4 text-gray-100 focus:border-violet-400 outline-none"
+                    />
+                    <svg
+                      v-if="isEmailValid"
+                      class="w-[25px] absolute right-[5px] bottom-0 -translate-y-1/2 top-[50%]"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                      <g
+                        id="SVGRepo_tracerCarrier"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></g>
+                      <g id="SVGRepo_iconCarrier">
+                        <path
+                          d="M5 14L8.23309 16.4248C8.66178 16.7463 9.26772 16.6728 9.60705 16.2581L18 6"
+                          stroke="#053ba3"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        ></path>
+                      </g>
+                    </svg>
+                  </div>
+                  <label v-if="!isEmailValid && inputEmailError" for="confirm_password" class="block text-sm text-[#ff00009e] mb-1">
+                    {{ inputEmailError }}
+                  </label>
                 </div>
                 <div class="mt-4">
                   <label for="password" class="block text-sm text-gray-400 mb-1"
                     >Password</label
                   >
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder=""
-                    class="w-full rounded-md border border-gray-700 bg-gray-900 py-3 px-4 text-gray-100 focus:border-violet-400 outline-none"
-                  />
+                  <div class="registration__input-box relative">
+                    <input
+                      v-model="password"
+                      type="password"
+                      autocomplete="new-password"
+                      class="w-full rounded-md border border-gray-700 bg-gray-900 py-3 px-4 text-gray-100 focus:border-violet-400 outline-none"
+                    />
+                    <svg v-if="isPasswordValid" class="w-[25px] absolute right-[5px] bottom-0 -translate-y-1/2 top-[50%]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                      <g
+                        id="SVGRepo_tracerCarrier"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></g>
+                      <g id="SVGRepo_iconCarrier">
+                        <path
+                          d="M5 14L8.23309 16.4248C8.66178 16.7463 9.26772 16.6728 9.60705 16.2581L18 6"
+                          stroke="#053ba3"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        ></path>
+                      </g>
+                    </svg>
+                  </div>
+                  <label v-if="!isPasswordValid && inputPasswordError" for="confirm_password" class="block text-sm text-[#ff00009e] mb-1">
+                    {{ inputPasswordError }}
+                  </label>
                   <div class="flex justify-end text-xs text-gray-400 mt-2 mb-3">
                     <a
                       rel="noopener noreferrer"
@@ -48,8 +93,12 @@
                       >Forgot Password ?</a
                     >
                   </div>
+                  <label v-if="messageError" for="confirm_password" class="block text-sm text-[#ff00009e] mb-1">
+                    {{ messageError }}
+                  </label>
                 </div>
                 <button
+                  @click.self.prevent="handlerLogin"
                   class="block w-full bg-[#053BA3] p-3 text-center text-white rounded-md font-semibold hover:bg-[#04328A] focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 focus:ring-offset-[#12192C]"
                 >
                   Sign in
@@ -119,25 +168,34 @@
           </div>
         </div>
 
-        <home-footer/>
+        <home-footer />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, computed } from "vue";
+import { useRouter } from "vue-router";
 import NavBar from "@/components/sections/NavBar.vue";
 import bgImage from "@/assets/images/authorization-bg.jpg";
-import HomeFooter from '@/components/sections/HomeFooter.vue';
-import { getUpcomingMovies } from "@/services/movieService";
+import HomeFooter from "@/components/sections/HomeFooter.vue";
+import { login } from "@/services/authService";
 
 export default {
   components: { NavBar, HomeFooter },
   setup() {
-    const releaseFilmsData = ref([]);
+    const router = useRouter();
 
     const navTop = ref(0);
+    const email = ref("");
+    const password = ref("");
+
+    const inputEmailError = ref("");
+    const inputPasswordError = ref("");
+    const messageError = ref("");
+
+
     let lastScrollY = window.scrollY;
 
     const handleScroll = () => {
@@ -155,33 +213,65 @@ export default {
 
     onMounted(() => {
       window.addEventListener("scroll", handleScroll);
+
+      const token = localStorage.getItem("token")
+      const userId = localStorage.getItem("id")
+
+      if (token && userId){
+        router.push(`/authorization/profile/${userId}`);
+      }
     });
 
     onUnmounted(() => {
       window.removeEventListener("scroll", handleScroll);
     });
 
-    const fetchAPI = async (fetchFunction, targetData, limit, applyFilter = true) => {
+    const isEmailValid = computed(() => email.value.length > 3 && email.value.includes("@"));
+    const isPasswordValid = computed(() => password.value.length > 6);
+
+
+
+    const handlerLogin = async () => {
+      if (!isEmailValid.value) {
+        inputEmailError.value = 'Email address must be more than 3 characters and have the @ symbol'
+        return
+      }
+
+      if (!isPasswordValid.value) {
+        inputPasswordError.value = 'Password must be more than 6 characters long'
+        return
+      }
+
+
       try {
-        const response = await fetchFunction();
-        if (!Array.isArray(response))
-          throw new Error(`Invalid response for ${targetData}`);
-        targetData.value = applyFilter
-          ? response
-              .filter(
-                ({ backdrop_path, original_title, original_name, overview }) =>
-                  backdrop_path && (original_title || original_name) && overview
-              )
-              .slice(0, limit)
-          : response.slice(0, limit);
+        const formLogin = {
+          email: email.value,
+          password: password.value,
+        };
+
+        const { token, user } = await login(formLogin);
+        
+        localStorage.setItem("token", token);
+        localStorage.setItem("id", user.id)
+        router.push(`/authorization/profile/${user.id}`);
       } catch (error) {
-        console.error(`Error fetching ${targetData}:`, error);
+        console.error(error);
+        messageError.value = error
       }
     };
 
-    fetchAPI(getUpcomingMovies, releaseFilmsData, 10);
-
-    return { releaseFilmsData, navTop, bgImage };
+    return { 
+      navTop,
+      email, 
+      password, 
+      isEmailValid, 
+      isPasswordValid, 
+      inputEmailError, 
+      inputPasswordError, 
+      messageError,
+      handlerLogin, 
+      bgImage 
+    };
   },
 };
 </script>

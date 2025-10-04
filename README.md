@@ -91,32 +91,32 @@
 
 filmsland/
 ├── backend/
-│   ├── config/          # Конфігураційні файли (якщо є)
-│   ├── controllers/     # Контролери (логіка обробки запитів)
-│   ├── middlewares/     # Middleware Express (напр., для перевірки JWT)
-│   ├── models/          # Моделі Mongoose (схеми даних)
-│   ├── node_modules/    # Залежності бекенду
-│   ├── routes/          # Маршрути API (напр., authRoutes.js)
-│   ├── .env             # Змінні середовища бекенду
+│   ├── config/         # Конфігураційні файли (якщо є)
+│   ├── controllers/    # Контролери (логіка обробки запитів)
+│   ├── middlewares/    # Middleware Express (напр., для перевірки JWT)
+│   ├── models/         # Моделі Mongoose (схеми даних)
+│   ├── node_modules/   # Залежності бекенду
+│   ├── routes/         # Маршрути API (напр., authRoutes.js)
+│   ├── .env            # Змінні середовища бекенду
 │   ├── package-lock.json
 │   ├── package.json
-│   └── server.js        # Основний файл запуску сервера Express
+│   └── server.js       # Основний файл запуску сервера Express
 │
 ├── frontend/
-│   ├── node_modules/    # Залежності фронтенду
-│   ├── public/          # Статичні файли (index.html, favicon)
-│   ├── src/             # Вихідний код фронтенду (компоненти, стилі, логіка)
-│   ├── .env             # Змінні середовища фронтенду
-│   ├── babel.config.js  # Конфігурація Babel
-│   ├── jsconfig.json    # Конфігурація JS/VSCode
+│   ├── node_modules/   # Залежності фронтенду
+│   ├── public/         # Статичні файли (index.html, favicon)
+│   ├── src/            # Вихідний код фронтенду (компоненти, стилі, логіка)
+│   ├── .env            # Змінні середовища фронтенду
+│   ├── babel.config.js # Конфігурація Babel
+│   ├── jsconfig.json   # Конфігурація JS/VSCode
 │   ├── package-lock.json
 │   ├── package.json
 │   ├── postcss.config.js# Конфігурація PostCSS
 │   ├── tailwind.config.js# Конфігурація Tailwind CSS (якщо використовується)
-│   └── vue.config.js    # Конфігурація Vue CLI
+│   └── vue.config.js   # Конфігурація Vue CLI
 │
-├── .gitignore           # Файли та папки, що ігноруються Git
-└── README.md            # Цей файл опису проєкту
+├── .gitignore          # Файли та папки, що ігноруються Git
+└── README.md           # Цей файл опису проєкту
 
 ## Важливі зауваження
 

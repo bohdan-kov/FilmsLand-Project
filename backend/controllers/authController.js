@@ -1,6 +1,11 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+
+// Налаштування multer
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 exports.register = async (req, res) => {
   try {
@@ -51,5 +56,42 @@ exports.getProfile = async (req, res) => {
     res.json(user);
   } catch (err) {
     res.status(500).json({ message: 'Помилка отримання профілю' });
+  }
+};
+
+exports.uploadPhoto = [
+  upload.single('photo'),
+  async (req, res) => {
+    try {
+      const user = await User.findById(req.userId);
+
+      if (!user) return res.status(404).json({ message: 'Користувача не знайдено' });
+
+      user.photo = {
+        data: req.file.buffer,
+        contentType: req.file.mimetype
+      };
+
+      await user.save();
+
+      res.json({ message: 'Фото завантажено успішно' });
+    } catch (err) {
+      res.status(500).json({ message: 'Помилка при завантаженні фото', error: err.message });
+    }
+  }
+];
+
+
+exports.getPhoto = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+    if (!user || !user.photo || !user.photo.data) {
+      return res.status(404).json({ message: 'Фото не знайдено' });
+    }
+
+    res.set('Content-Type', user.photo.contentType);
+    res.send(user.photo.data);
+  } catch (err) {
+    res.status(500).json({ message: 'Помилка отримання фото' });
   }
 };
