@@ -2,9 +2,6 @@
   <div class="home__view-inner">
     <div class="home__view-wrapper pt-[60px]">
       <div class="page__container">
-        <nav-bar :style="{ top: navTop + 'px' }" class="home__view--nav-bar" />
-
-
         <home-footer/>
       </div>
 
@@ -13,39 +10,17 @@
 </template>
 
 <script>
-import { ref, onMounted, onUnmounted } from "vue";
-import NavBar from '@/components/sections/NavBar.vue';
-import HomeFooter from '@/components/sections/HomeFooter.vue';
+import { ref } from "vue";
+
 import { getUpcomingMovies } from '@/services/movieService';
+
+import HomeFooter from '@/components/sections/HomeFooter.vue';
 
 export default {
   components: { NavBar, HomeFooter },
   setup() {
     const releaseFilmsData = ref([]);
 
-    const navTop = ref(0);
-    let lastScrollY = window.scrollY;
-
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const delta = currentScrollY - lastScrollY;
-
-      if (delta > 0 && navTop.value > -60) {
-        navTop.value = Math.max(navTop.value - delta, -60);
-      } else if (delta < 0 && navTop.value < 0) {
-        navTop.value = Math.min(navTop.value - delta, 0);
-      }
-
-      lastScrollY = currentScrollY;
-    };
-
-    onMounted(() => {
-      window.addEventListener("scroll", handleScroll);
-    });
-
-    onUnmounted(() => {
-      window.removeEventListener("scroll", handleScroll);
-    });
 
     const fetchAPI = async (fetchFunction, targetData, limit, applyFilter = true) => {
       try {
@@ -62,7 +37,7 @@ export default {
 
     fetchAPI(getUpcomingMovies, releaseFilmsData, 10);
 
-    return { releaseFilmsData, navTop };
+    return { releaseFilmsData };
   }
 };
 </script>

@@ -8,7 +8,6 @@
     ></div>
     <div class="media__details-wrapper">
       <div class="page__container">
-        <nav-bar :style="{ top: navTop + 'px' }" class="home__view--nav-bar" />
         <div
           class="media__details-box absolute flex gap-[40px] max-w-[1500px] top-0 pt-[100px] left-0 right-0 mx-auto px-[15px]"
         >
@@ -138,18 +137,19 @@
 </template>
 
 <script>
-import { ref, onMounted, onUnmounted, computed } from "vue";
+import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import NavBar from "@/components/sections/NavBar.vue";
-import HomeFooter from "@/components/sections/HomeFooter.vue";
+
 import { getDetailsMovies } from "@/services/movieService";
+
+import HomeFooter from "@/components/sections/HomeFooter.vue";
 import StarRating from "vue-star-rating";
 
 import buttonPrev from "@/components/UI/buttonPrev";
 
 
 export default {
-  components: { NavBar, HomeFooter, StarRating, buttonPrev },
+  components: { HomeFooter, StarRating, buttonPrev },
   setup() {
     const router = useRouter();
     const route = useRoute();
@@ -158,29 +158,6 @@ export default {
 
     const movieId = route.params.id;
 
-    const navTop = ref(0);
-    let lastScrollY = window.scrollY;
-
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const delta = currentScrollY - lastScrollY;
-
-      if (delta > 0 && navTop.value > -60) {
-        navTop.value = Math.max(navTop.value - delta, -60);
-      } else if (delta < 0 && navTop.value < 0) {
-        navTop.value = Math.min(navTop.value - delta, 0);
-      }
-
-      lastScrollY = currentScrollY;
-    };
-
-    onMounted(() => {
-      window.addEventListener("scroll", handleScroll);
-    });
-
-    onUnmounted(() => {
-      window.removeEventListener("scroll", handleScroll);
-    });
 
     const getReleaseYear = computed(() => {
       return detailsFilmsData.value.release_date
@@ -212,7 +189,6 @@ export default {
 
     return {
       detailsFilmsData,
-      navTop,
       getReleaseYear,
       getDurationMedia,
       backPage

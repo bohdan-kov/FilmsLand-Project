@@ -68,37 +68,37 @@ import calendarView from "../../UI/calendarView.vue";
 export default {
   props: {
     label: {
-      type: String
+      type: String,
     },
     field: {
-      type: String
+      type: String,
     },
     modelValue: {
-      type: String
+      type: String,
     },
     isOpenCalendar: {
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
   components: {
-    calendarView
+    calendarView,
   },
   data() {
     return {
-      date: this.modelValue
-    }
+      date: this.modelValue,
+    };
   },
   methods: {
-    dateSelected(date, type){
-      this.$emit('onDateSelected', date, type)
+    dateSelected(date, type) {
+      this.$emit("onDateSelected", date, type);
     },
   },
   watch: {
-    modelValue(newValue){
-      this.date = newValue
-    }
+    modelValue(newValue) {
+      this.date = newValue;
+    },
   },
-}
+};
 </script>
 <style scoped>
 .filters-dropdown__date-input::-webkit-calendar-picker-indicator {

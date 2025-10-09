@@ -50,8 +50,8 @@
 </template>
 
 <script>
-import buttonInfo from '../UI/buttonInfo.vue';
-import buttonLike from '../UI/buttonLike.vue';
+import buttonInfo from "../UI/buttonInfo.vue";
+import buttonLike from "../UI/buttonLike.vue";
 
 export default {
   components: {
@@ -60,19 +60,19 @@ export default {
   },
   props: {
     item: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   methods: {
     getYearItem(item) {
-      return item?.release_date ? item.release_date.split('-')[0] : 'In release';
+      return item?.release_date ? item.release_date.split("-")[0] : "In release";
     },
     ratingRounding(num) {
-      return num ? num.toFixed(1) : '-';
+      return num ? num.toFixed(1) : "-";
     },
-    openMediaDetails(mediaId){
-      this.$router.push(`/media-details/${mediaId}`)
-    }
+    openMediaDetails(mediaId) {
+      this.$router.push(`/media-details/${mediaId}`);
+    },
   },
 };
 </script>
@@ -93,6 +93,6 @@ export default {
 
 .swiper-slide-active .media__card-desc,
 .media__card-item:hover .media__card-desc {
-  animation: scale-in-ver-bottom 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  animation: scale-in-ver-bottom 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 </style>

@@ -2,8 +2,6 @@
   <div class="discover__films-inner">
     <div class="discover__films-wrapper pt-[60px]">
       <div class="page__container mb-[50px] min-h-screen">
-        <nav-bar :style="{ top: navTop + 'px' }" class="discover__films--nav-bar" />
-
         <h2
           class="mt-[50px] text-3xl mb-[20px] font-heading inline-block pr-11 relative before:content-[url('@/assets/images/icons/title.svg')] before:absolute before:right-0 before:-top-[10px]"
         >
@@ -74,12 +72,12 @@
 </template>
 
 <script>
-import { ref, onMounted, onUnmounted, watch } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import NavBar from "@/components/sections/NavBar.vue";
-import HomeFooter from "@/components/sections/HomeFooter.vue";
 import { getGenreMovies, getDiscoverMovies } from "@/services/movieService";
+
+import HomeFooter from "@/components/sections/HomeFooter.vue";
 import SortDropdown from "@/components/filter-panel/SortDropdown.vue";
 import FiltersDropdown from "@/components/filter-panel/FiltersDropdown.vue";
 import MediaListCard from "@/components/cards/MediaListCard.vue";
@@ -87,7 +85,6 @@ import PaginationNav from "@/components/UI/paginationNav.vue";
 
 export default {
   components: {
-    NavBar,
     HomeFooter,
     SortDropdown,
     FiltersDropdown,
@@ -116,30 +113,8 @@ export default {
       "vote_count.gte": "",
     });
 
-    const navTop = ref(0);
-    let lastScrollY = window.scrollY;
-
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const delta = currentScrollY - lastScrollY;
-
-      if (delta > 0 && navTop.value > -60) {
-        navTop.value = Math.max(navTop.value - delta, -60);
-      } else if (delta < 0 && navTop.value < 0) {
-        navTop.value = Math.min(navTop.value - delta, 0);
-      }
-
-      lastScrollY = currentScrollY;
-    };
-
     onMounted(() => {
-      window.addEventListener("scroll", handleScroll);
-      // fetchDiscoverMovies();
       fetchGenreMovies();
-    });
-
-    onUnmounted(() => {
-      window.removeEventListener("scroll", handleScroll);
     });
 
     watch(
@@ -229,7 +204,6 @@ export default {
       discoverFilters,
       fetchDiscoverMovies,
       fetchGenreMovies,
-      navTop,
       totalPages,
       onChangePage,
       pageLoading,

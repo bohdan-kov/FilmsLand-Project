@@ -1,47 +1,47 @@
 <template>
   <div class="filters-dropdown__item-rating px-[7px] pb-[20px]">
-    <VueSlider 
+    <VueSlider
       v-model="rangeLocal"
       @change="(v, i) => $emit('onRangeSelected', v, i)"
       :min="minValue"
       :max="maxValue"
       :interval="intervalValue"
-      marks 
+      marks
     />
   </div>
 </template>
 
 <script>
-import VueSlider from 'vue-3-slider-component'
+import VueSlider from "vue-3-slider-component";
 
 export default {
   components: {
-    VueSlider
+    VueSlider,
   },
-  emits: ['onRangeSelected'],
+  emits: ["onRangeSelected"],
   props: {
     rangeValues: {
-      type: Array
+      type: Array,
     },
     minValue: {
       type: Number,
-      default: 0
+      default: 0,
     },
     maxValue: {
       type: Number,
-      default: 10
+      default: 10,
     },
     intervalValue: {
       type: Number,
-      default: 1
-    }
+      default: 1,
+    },
   },
   data() {
     return {
-      rangeLocal: JSON.parse(JSON.stringify(this.rangeValues))
-    }
+      rangeLocal: JSON.parse(JSON.stringify(this.rangeValues)),
+    };
   },
-}
+};
 </script>
 
 <style scoped>

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <vue-cal 
-      date-picker 
-      :views="['month', 'year']" 
+    <vue-cal
+      date-picker
+      :views="['month', 'year']"
       @update:selectedDate="onDateSelected"
     />
   </div>
@@ -10,6 +10,7 @@
 
 <script>
 import { VueCal } from "vue-cal";
+
 import "vue-cal/style";
 
 export default {
@@ -19,14 +20,14 @@ export default {
   props: {
     dateType: {
       type: String,
-      default: 'default'
-    }
+      default: "default",
+    },
   },
   methods: {
-    onDateSelected(date){
-      const [day, month, year] = new Date(date).toLocaleDateString().split('.')
-      const formattedDate = `${year}-${month}-${day}`
-      this.$emit('onDateSelected', formattedDate, this.dateType)
+    onDateSelected(date) {
+      const [day, month, year] = new Date(date).toLocaleDateString().split(".");
+      const formattedDate = `${year}-${month}-${day}`;
+      this.$emit("onDateSelected", formattedDate, this.dateType);
     },
   },
 };

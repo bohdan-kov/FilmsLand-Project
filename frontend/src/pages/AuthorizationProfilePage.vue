@@ -8,15 +8,13 @@
     ></div>
     <div class="profile__view-wrapper pt-[60px]">
       <div class="page__container">
-        <nav-bar :style="{ top: navTop + 'px' }" class="home__view--nav-bar" />
-
         <div
           class="profile__view-box absolute flex flex-col items-center gap-[40px] max-w-[1500px] top-0 pt-[100px] left-0 right-0 mx-auto px-[15px] text-center"
         >
           <div class="profile__view-avatar bg-white/30 rounded-full relative">
             <img
-              v-if="avatarUrl"
-              :src="avatarUrl"
+              v-if="userStore.avatarUrl"
+              :src="userStore.avatarUrl"
               alt="Avatar"
               class="rounded-full w-[200px] h-[200px] object-cover shadow-2xl"
             />
@@ -119,7 +117,7 @@
           </div>
           <div class="profile__view-desc w-full">
             <h3 class="profile__view-title font-contrast text-4xl font-normal inline">
-              Hi, {{ name }}
+              Hi, {{ userStore.name }}
             </h3>
             <div class="profile__view-header flex items-center gap-[10px]"></div>
           </div>
@@ -131,51 +129,25 @@
 </template>
 
 <script>
-import { ref, onMounted, onUnmounted, watch } from "vue";
+import { ref, onMounted, watch } from "vue";
+
+import { useUserStore } from "@/stores/user";
 import { useRouter } from "vue-router";
-import NavBar from "@/components/sections/NavBar.vue";
+import { uploadPhoto } from "@/services/authService";
+
+
 import HomeFooter from "@/components/sections/HomeFooter.vue";
 import bgImage from "@/assets/images/authorization-bg.jpg";
-import { getProfile, uploadPhoto } from "@/services/authService";
 
 export default {
-  components: { NavBar, HomeFooter },
+  components: { HomeFooter },
   setup() {
     const router = useRouter();
 
-    const navTop = ref(0);
-    const email = ref("");
-    const name = ref("");
-    const avatarUrl = ref("");
     const selectedFile = ref(null);
+    const userStore = useUserStore();
 
 
-    let lastScrollY = window.scrollY;
-
-    const updateNavOnScroll = () => {
-      const currentScrollY = window.scrollY;
-      const deltaY = currentScrollY - lastScrollY;
-
-      if (deltaY > 0 && navTop.value > -60) {
-        navTop.value = Math.max(navTop.value - deltaY, -60);
-      } else if (deltaY < 0 && navTop.value < 0) {
-        navTop.value = Math.min(navTop.value - deltaY, 0);
-      }
-
-      lastScrollY = currentScrollY;
-    };
-
-    const fetchUserProfile = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const user = await getProfile(token);
-        name.value = user.name;
-        avatarUrl.value = bufferToBase64Image(user.photo);
-        
-      } catch (error) {
-        console.error("Помилка при отриманні профілю:", error);
-      }
-    };
 
     const uploadSelectedPhoto = async () => {
       if (!selectedFile.value) return;
@@ -183,6 +155,7 @@ export default {
       try {
         const token = localStorage.getItem("token");
         await uploadPhoto(selectedFile.value, token);
+        router.go(0)
       } catch (error) {
         console.error("Помилка при завантаженні фото:", error);
       }
@@ -196,21 +169,10 @@ export default {
       localStorage.removeItem("token");
       localStorage.removeItem("id");
       router.push("/authorization/login");
+      userStore.resetUser()
     };
 
     
-    const bufferToBase64Image = (photo) => {
-      if (!photo?.data?.data || !photo?.contentType) return null;
-
-      const binary = new Uint8Array(photo.data.data).reduce(
-        (data, byte) => data + String.fromCharCode(byte),
-        ""
-      );
-
-      const base64String = btoa(binary);
-      return `data:${photo.contentType};base64,${base64String}`;
-    }
-
     watch(
       selectedFile,
       (file) => {
@@ -218,23 +180,16 @@ export default {
       }
     );
 
-    onMounted(() => {
-      window.addEventListener("scroll", updateNavOnScroll);
-      fetchUserProfile();
+    onMounted(async () => {
+      await userStore.fetchUser();
     });
 
-    onUnmounted(() => {
-      window.removeEventListener("scroll", updateNavOnScroll);
-    });
 
     return {
-      email,
-      name,
       bgImage,
-      navTop,
       selectedFile,
+      userStore,
       handleFileInput,
-      avatarUrl,
       logout,
     };
   },

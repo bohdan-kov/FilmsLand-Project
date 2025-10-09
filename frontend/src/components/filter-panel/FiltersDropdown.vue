@@ -13,8 +13,13 @@
       />
     </div>
 
-    <div v-show="isOpenFilter" class="filters-dropdown__items py-[14px] rounded-b-[15px] bg-[#1C2331]">
-      <div class="filters-dropdown__item px-[16px] py-[14px] border-b-[2px] border-[#12192C]">
+    <div
+      v-show="isOpenFilter"
+      class="filters-dropdown__items py-[14px] rounded-b-[15px] bg-[#1C2331]"
+    >
+      <div
+        class="filters-dropdown__item px-[16px] py-[14px] border-b-[2px] border-[#12192C]"
+      >
         <h6 class="filters-dropdown__item-title mb-[10px] font-normal">Release date</h6>
         <DatePicker
           v-model="localFilters['release_date.gte']"
@@ -35,23 +40,28 @@
           field="release_date.lte"
         />
       </div>
-      <div class="filters-dropdown__item px-[16px] py-[14px] border-b-[2px] border-[#12192C]">
+      <div
+        class="filters-dropdown__item px-[16px] py-[14px] border-b-[2px] border-[#12192C]"
+      >
         <h6 class="filters-dropdown__item-title mb-[10px] font-normal">Genre</h6>
-        <GenrePicker 
+        <GenrePicker
           v-model="localFilters['with_genres']"
           :genreLists="genreListsData"
           @onGenreSelected="genreSelected"
         />
       </div>
-      <div class="filters-dropdown__item px-[16px] py-[14px] border-b-[2px] border-[#12192C]">
+      <div
+        class="filters-dropdown__item px-[16px] py-[14px] border-b-[2px] border-[#12192C]"
+      >
         <h6 class="filters-dropdown__item-title mb-[10px] font-normal">Movie rating</h6>
-        <RangePicker
-          @onRangeSelected="ratingSelected"
-          :rangeValues="ratingRange"
-        />
+        <RangePicker @onRangeSelected="ratingSelected" :rangeValues="ratingRange" />
       </div>
-      <div class="filters-dropdown__item px-[16px] py-[14px] border-b-[2px] border-[#12192C]">
-        <h6 class="filters-dropdown__item-title mb-[10px] font-normal">Minimum number of votes</h6>
+      <div
+        class="filters-dropdown__item px-[16px] py-[14px] border-b-[2px] border-[#12192C]"
+      >
+        <h6 class="filters-dropdown__item-title mb-[10px] font-normal">
+          Minimum number of votes
+        </h6>
         <RangePicker
           @onRangeSelected="votesSelected"
           :rangeValues="votesRange"
@@ -65,7 +75,8 @@
 
 <script>
 import clickOutside from "@/directives/v-click-outside.js";
-import DatePicker from './filters/DatePicker.vue';
+
+import DatePicker from "./filters/DatePicker.vue";
 import GenrePicker from "./filters/GenrePicker.vue";
 import RangePicker from "./filters/RangePicker.vue";
 
@@ -75,18 +86,18 @@ export default {
   props: {
     modelValue: {
       type: Object,
-      required: true
+      required: true,
     },
     genreListsData: {
       type: Array,
-    }
+    },
   },
   data() {
     return {
       isOpenFilter: true,
       isOpenCalendar: {
-        'release_date.gte': false,
-        'release_date.lte': false
+        "release_date.gte": false,
+        "release_date.lte": false,
       },
       ratingRange: [0, 10],
       votesRange: [0],
@@ -99,10 +110,10 @@ export default {
   watch: {
     localFilters: {
       deep: true,
-      handler(newValue){
-        this.$emit("update:modelValue", newValue)
-      }
-    }
+      handler(newValue) {
+        this.$emit("update:modelValue", newValue);
+      },
+    },
   },
   methods: {
     toggleFilter() {
@@ -119,34 +130,34 @@ export default {
       this.closeCalendar(type);
     },
     setCurrentDate() {
-      const [day, month, year] = new Date().toLocaleDateString().split('.');
+      const [day, month, year] = new Date().toLocaleDateString().split(".");
       const formattedDate = `${year}-${month}-${day}`;
-      this.localFilters['release_date.lte'] = formattedDate;
+      this.localFilters["release_date.lte"] = formattedDate;
     },
     genreSelected(id) {
-      const current = this.localFilters['with_genres'];
+      const current = this.localFilters["with_genres"];
       const idStr = String(id);
-      const genreArray = current ? current.split(',') : [];
+      const genreArray = current ? current.split(",") : [];
 
       if (genreArray.includes(idStr)) {
-        this.localFilters['with_genres'] = genreArray
-          .filter(item => item !== idStr)
-          .join(',');
+        this.localFilters["with_genres"] = genreArray
+          .filter((item) => item !== idStr)
+          .join(",");
       } else {
         genreArray.push(idStr);
-        this.localFilters['with_genres'] = genreArray.join(',');
+        this.localFilters["with_genres"] = genreArray.join(",");
       }
     },
-    ratingSelected(ratingValue, typeValue){
-      if (typeValue === 0){
-        this.localFilters['vote_average.gte'] = ratingValue[0] 
+    ratingSelected(ratingValue, typeValue) {
+      if (typeValue === 0) {
+        this.localFilters["vote_average.gte"] = ratingValue[0];
       } else {
-        this.localFilters['vote_average.lte'] = ratingValue[1] 
-      }      
+        this.localFilters["vote_average.lte"] = ratingValue[1];
+      }
     },
-    votesSelected(votesValue){
-      this.localFilters['vote_count.gte'] = votesValue
-    }
-  }
+    votesSelected(votesValue) {
+      this.localFilters["vote_count.gte"] = votesValue;
+    },
+  },
 };
 </script>

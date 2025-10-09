@@ -52,10 +52,7 @@
         >
           1
         </button>
-        <div
-          class="w-9 h-9 flex items-center justify-center"
-          index="1"
-        >
+        <div class="w-9 h-9 flex items-center justify-center" index="1">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -87,7 +84,7 @@
           {{ item }}
         </button>
       </li>
-      <div v-if="(totalPages - currentPage) > 3" class="flex gap-[10px]">
+      <div v-if="totalPages - currentPage > 3" class="flex gap-[10px]">
         <div class="w-9 h-9 flex items-center justify-center" index="1">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -186,8 +183,10 @@ export default {
 
       start = Math.max(start, 1);
 
-      return Array.from({ length }, (_, i) => start + i).filter(item => item <= this.totalPages);
-  } ,
+      return Array.from({ length }, (_, i) => start + i).filter(
+        (item) => item <= this.totalPages
+      );
+    },
   },
 };
 </script>

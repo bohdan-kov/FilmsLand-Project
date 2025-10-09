@@ -1,18 +1,20 @@
 <template>
-  <MainLayout>
+  <MainLayout  class="app-layout">
     <router-view />
   </MainLayout>
 </template>
 
-<script>
-import MainLayout from "@/layouts/MainLayout.vue"
+<script setup>
+import MainLayout from '@/layouts/MainLayout.vue'
+import { onMounted } from 'vue'
+import { useUserStore } from '@/stores/user'
 
-export default {
-  name: 'App',
-  component: {
-    MainLayout
-  }
-}
+const userStore = useUserStore()
+
+onMounted(() => {
+  userStore.fetchUser()
+})
+
 </script>
 
 <style>

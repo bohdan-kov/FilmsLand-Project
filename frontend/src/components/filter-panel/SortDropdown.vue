@@ -6,14 +6,14 @@
       :class="{ '!rounded-b-[0]': isOpenFilter }"
     >
       <p class="sort-dropdown__name">Sorting</p>
-      <img 
-        :class="{'rotate-[90deg]': isOpenFilter}"
-        src="@/assets/images/icons/arrow-right.svg" 
-        alt="" 
+      <img
+        :class="{ 'rotate-[90deg]': isOpenFilter }"
+        src="@/assets/images/icons/arrow-right.svg"
+        alt=""
       />
     </div>
     <div
-      v-show="isOpenFilter" 
+      v-show="isOpenFilter"
       class="sort-dropdown__filter px-[16px] py-[14px] rounded-b-[15px] bg-[#1C2331]"
     >
       <select
@@ -39,9 +39,9 @@ export default {
   },
   props: {
     modelValue: {
-      type: String
-    }
-  }
+      type: String,
+    },
+  },
 };
 </script>
 

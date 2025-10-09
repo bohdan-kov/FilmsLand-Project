@@ -8,8 +8,6 @@
     ></div>
     <div class="registration__view-wrapper">
       <div class="page__container">
-        <nav-bar :style="{ top: navTop + 'px' }" class="home__view--nav-bar" />
-
         <div class="registration__view-box absolute inset-0 max-h-screen">
           <div class="registration__view-form h-full flex justify-center items-center">
             <div class="w-96 rounded-lg bg-[#12192C] p-8 text-gray-100">
@@ -222,18 +220,18 @@
 </template>
 
 <script>
-import { ref, onMounted, onUnmounted, computed } from "vue";
+import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
-import NavBar from "@/components/sections/NavBar.vue";
-import bgImage from "@/assets/images/authorization-bg.jpg";
-import HomeFooter from "@/components/sections/HomeFooter.vue";
 import { register } from "@/services/authService";
 
+import bgImage from "@/assets/images/authorization-bg.jpg";
+
+import HomeFooter from "@/components/sections/HomeFooter.vue";
+
 export default {
-  components: { NavBar, HomeFooter },
+  components: { HomeFooter },
   setup() {
     const router = useRouter();
-    const navTop = ref(0);
 
     const email = ref("");
     const userName = ref("");
@@ -244,29 +242,6 @@ export default {
     const inputUserNameError = ref("");
     const inputPasswordError = ref("");
     const inputPasswordConfigError = ref("");
-
-    let lastScrollY = window.scrollY;
-
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const delta = currentScrollY - lastScrollY;
-
-      if (delta > 0 && navTop.value > -60) {
-        navTop.value = Math.max(navTop.value - delta, -60);
-      } else if (delta < 0 && navTop.value < 0) {
-        navTop.value = Math.min(navTop.value - delta, 0);
-      }
-
-      lastScrollY = currentScrollY;
-    };
-
-    onMounted(() => {
-      window.addEventListener("scroll", handleScroll);
-    });
-
-    onUnmounted(() => {
-      window.removeEventListener("scroll", handleScroll);
-    });
 
     const isEmailValid = computed(() => email.value.length > 3 && email.value.includes("@"));
     const isUserNameValid = computed(() => userName.value.length > 3);
@@ -309,8 +284,7 @@ export default {
     };
 
     return { 
-       navTop,
-       email, 
+       email,
        userName, 
        password, 
        passwordConfig, 
