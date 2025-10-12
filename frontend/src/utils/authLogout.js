@@ -1,8 +1,8 @@
-import { useRouter } from "vue-router";
+// import { useRouter } from "vue-router";
 
 export const logout = () => {
-  const router = useRouter();
+  // const router = useRouter();
   localStorage.removeItem("token");
   localStorage.removeItem("id");
-  router.push("/authorization/login");
+  // router.push("/authorization/login");
 };

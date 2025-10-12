@@ -17,9 +17,12 @@
       :scrollbar="{ draggable: true }"
       class="app__slider-inner"
     >
-      <!-- :autoplay="{delay: 3000, disableOnInteraction: false}" -->
       <swiper-slide v-for="(item, index) in filmsData" :key="index">
-        <media-card :item="item" />
+        <small-media-card 
+          class="my-[10px]" 
+          :item="item" 
+          :is-favorite="isFavorite(item.id || item.movieId)" 
+        />
       </swiper-slide>
 
       <div class="swiper-steps mt-[30px]"></div>
@@ -35,7 +38,9 @@
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
+import { storeToRefs } from "pinia";
+import { useUserStore } from "@/stores/user";
 
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Navigation, Pagination, Scrollbar, Autoplay, A11y } from "swiper/modules";
@@ -45,10 +50,7 @@ import "swiper/css";
 
 import buttonPrev from "@/components/UI/buttonPrev";
 import buttonNext from "@/components/UI/buttonNext";
-import MediaCard from "@/components/cards/MediaCard.vue";
-
-
-
+import SmallMediaCard from "@/components/cards/SmallMediaCard.vue";
 
 export default {
   components: {
@@ -56,31 +58,59 @@ export default {
     SwiperSlide,
     buttonPrev,
     buttonNext,
-    MediaCard,
+    SmallMediaCard,
   },
   props: {
     filmsData: {
       type: Array,
+      default: () => [],
     },
     title: {
       type: String,
+      default: "",
     },
     paddingSlider: {
       type: Number,
       default: 0,
     },
   },
-  data() {
-    return {};
-  },
+
   setup(props) {
+    const userStore = useUserStore();
+    const { favoriteMovies } = storeToRefs(userStore);
+    
+    const windowWidth = ref(window.innerWidth);
+    
+    const updateWindowWidth = () => {
+      windowWidth.value = window.innerWidth;
+    };
+    
+    onMounted(() => {
+      window.addEventListener("resize", updateWindowWidth);
+    });
+    
+    onUnmounted(() => {
+      window.removeEventListener("resize", updateWindowWidth);
+    });
+    
+    const favoritesMediaIds = computed(() => {
+      return favoriteMovies.value?.map((item) => Number(item.movieId)) || [];
+    });
+    
+    const isFavorite = (mediaId) => {
+      return favoritesMediaIds.value.includes(Number(mediaId));
+    };
+    
     const getSlidesPerView = computed(() => {
-      const width = window.innerWidth - props.paddingSlider;
+      const width = windowWidth.value - props.paddingSlider;
       return width > 1500 ? 5 : width > 1150 ? 4 : width > 850 ? 3 : width > 570 ? 2 : 1;
     });
+    
     return {
       getSlidesPerView,
       modules: [Navigation, Pagination, Scrollbar, Autoplay, A11y],
+      favoritesMediaIds,
+      isFavorite
     };
   },
 };

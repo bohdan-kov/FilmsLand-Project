@@ -1,0 +1,9 @@
+export default {
+    Action: 'Film genre in which the protagonist is thrust into a series of events that typically involve violence and physical feats. The genre tends to feature a mostly resourceful Hero struggling against incredible odds, which include life-threatening situations, a dangerous villain, or a pursuit which usually concludes in victory for the hero.',
+  Adventure: 'Film genre where the protagonist embarks on a journey filled with exploration, discovery, and often danger. These stories typically involve quests, exotic locations, and unexpected challenges that test the hero’s courage and determination.',
+  Animation: 'A genre in which the film is primarily created using drawings, computer-generated imagery, or other animation techniques. Animated films often feature imaginative worlds and characters and are popular among all age groups for their creativity and emotional storytelling.',
+  Comedy: 'Film genre designed to provoke laughter and entertain the audience through humorous situations, witty dialogue, and funny characters. Comedies often explore everyday scenarios in a lighthearted manner, aiming to uplift the mood of the viewer.',
+  Crime: 'A genre focused on criminal activities, investigations, and the pursuit of justice. These films often delve into the minds of criminals and law enforcement, exploring themes of morality, law, and the darker side of society.',
+  Documentary: 'Non-fiction genre that aims to document reality for the purposes of education, instruction, or maintaining a historical record. Documentaries often feature real people and events, providing factual insight into a wide range of topics and issues.',
+  Drama: 'Film genre that focuses on emotional and relational development of realistic characters. Dramas explore serious, often thought-provoking themes, and aim to evoke deep emotional responses through conflict, personal growth, and human struggles.'
+}

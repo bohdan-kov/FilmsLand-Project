@@ -1,7 +1,7 @@
 <template>
   <div class="profile__view-inner relative">
     <div
-      class="profile__details-background h-[100vh] bg-cover bg-center bg-no-repeat filter blur-[10px]"
+      class="profile__details-background h-[120vh] bg-cover bg-center bg-no-repeat filter blur-[10px]"
       :style="{
         backgroundImage: `url(${bgImage})`,
       }"
@@ -13,8 +13,8 @@
         >
           <div class="profile__view-avatar bg-white/30 rounded-full relative">
             <img
-              v-if="userStore.avatarUrl"
-              :src="userStore.avatarUrl"
+              v-if="userStore.photo"
+              :src="userStore.photo"
               alt="Avatar"
               class="rounded-full w-[200px] h-[200px] object-cover shadow-2xl"
             />
@@ -121,6 +121,13 @@
             </h3>
             <div class="profile__view-header flex items-center gap-[10px]"></div>
           </div>
+          <div class="profile__view-content w-full text-left">
+            <app-slider
+              v-if="userStore.favoriteMovies.length"
+              title="Favorite"
+              :filmsData="userStore.favoriteMovies"
+            />
+          </div>
         </div>
         <home-footer />
       </div>
@@ -134,20 +141,20 @@ import { ref, onMounted, watch } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useRouter } from "vue-router";
 import { uploadPhoto } from "@/services/authService";
-
+import { useToast } from "vue-toastification";
 
 import HomeFooter from "@/components/sections/HomeFooter.vue";
 import bgImage from "@/assets/images/authorization-bg.jpg";
+import AppSlider from "@/components/sliders/AppSlider.vue";
 
 export default {
-  components: { HomeFooter },
+  components: { HomeFooter, AppSlider },
   setup() {
     const router = useRouter();
+    const toast = useToast();
 
     const selectedFile = ref(null);
     const userStore = useUserStore();
-
-
 
     const uploadSelectedPhoto = async () => {
       if (!selectedFile.value) return;
@@ -155,9 +162,17 @@ export default {
       try {
         const token = localStorage.getItem("token");
         await uploadPhoto(selectedFile.value, token);
-        router.go(0)
+        toast.success("Фото успішно завантажено!", {
+          position: "bottom-right",
+          timeout: 3000,
+        });
+        userStore.fetchUser();
       } catch (error) {
-        console.error("Помилка при завантаженні фото:", error);
+        toast.error(`Помилка при завантаженні фото. ${error}`, {
+          position: "bottom-right",
+          timeout: 3000,
+        });
+        console.error("Помилка при завантаженні фото.", error);
       }
     };
 
@@ -169,21 +184,18 @@ export default {
       localStorage.removeItem("token");
       localStorage.removeItem("id");
       router.push("/authorization/login");
-      userStore.resetUser()
+      userStore.resetUser();
     };
 
-    
-    watch(
-      selectedFile,
-      (file) => {
-        if (file) uploadSelectedPhoto();
-      }
-    );
-
-    onMounted(async () => {
-      await userStore.fetchUser();
+    watch(selectedFile, (file) => {
+      if (file) uploadSelectedPhoto();
     });
 
+    onMounted(() => {
+      if (!userStore.name) {
+        userStore.fetchUser();
+      }
+    });
 
     return {
       bgImage,

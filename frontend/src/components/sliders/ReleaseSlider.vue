@@ -10,29 +10,11 @@
     :autoplay="{ delay: 3000, disableOnInteraction: false }"
     class="release__slider-inner mb-[78px] mt-[20px]"
   >
-    <swiper-slide v-for="(item, index) in filmsData" :key="index">
-      <div class="release__slider-item relative rounded-[10px]">
-        <div
-          class="release__slider-desc absolute right-0 w-[35%] h-full p-[21px_16px_23px_14px] rounded-r-[10px] bg-[rgba(16,16,16,0.30)] backdrop-blur-[2px]"
-        >
-          <h2 class="release__slider-title truncate font-contrast text-[30px]">
-            {{ item.original_title }}
-          </h2>
-          <div class="mb-[15px] truncate">Date Release: {{ item.release_date }}</div>
-          <div class="overflow-hidden text-ellipsis max-h-[45%]">
-            {{ item.overview }}
-          </div>
-          <div class="release__slider-action flex gap-[6px] absolute bottom-[23px]">
-            <button-info @click="openMediaDetails(item.id)" />
-            <button-like class="bg-[#053BA3]" />
-          </div>
-        </div>
-        <img
-          class="release__slider-img rounded-[10px]"
-          :src="'https://image.tmdb.org/t/p/original' + item.backdrop_path"
-          alt="no-img"
-        />
-      </div>
+    <swiper-slide v-for="(item, index) in filmsData" :key="item.id || index">
+      <large-media-card 
+        :item="item" 
+        :is-favorite="isFavorite(item.id || item.movieId)"
+      />
     </swiper-slide>
 
     <div class="swiper-button-next !w-[40px] !h-[40px]">
@@ -45,50 +27,69 @@
 </template>
 
 <script>
-import { computed } from "vue";
-import { useRouter } from "vue-router";
+import { computed, onMounted, onUnmounted, ref } from "vue";
+import { storeToRefs } from "pinia";
+import { useUserStore } from "@/stores/user";
 
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Navigation, Scrollbar, Autoplay, A11y } from "swiper/modules";
 import "swiper/css/navigation";
 import "swiper/css";
 
-import buttonInfo from "@/components/UI/buttonInfo";
-import buttonLike from "@/components/UI/buttonLike";
+import LargeMediaCard from '../cards/LargeMediaCard.vue';
 import buttonPrev from "@/components/UI/buttonPrev";
 import buttonNext from "@/components/UI/buttonNext";
-
-
 
 export default {
   components: {
     Swiper,
     SwiperSlide,
-    buttonInfo,
-    buttonLike,
     buttonPrev,
     buttonNext,
+    LargeMediaCard
   },
   props: {
     filmsData: {
       type: Array,
+      default: () => [],
     },
   },
   setup() {
-    const router = useRouter();
+    const userStore = useUserStore();
+    const { favoriteMovies } = storeToRefs(userStore);
 
-    const getSlidesPerView = computed(() => {
-      return window.innerWidth > 768 ? 2 : 1;
+    const windowWidth = ref(window.innerWidth);
+
+    const updateWindowWidth = () => {
+      windowWidth.value = window.innerWidth;
+    };
+
+    onMounted(() => {
+      window.addEventListener('resize', updateWindowWidth);
     });
 
-    const openMediaDetails = (mediaId) => {
-      router.push(`/media-details/${mediaId}`);
+    onUnmounted(() => {
+      window.removeEventListener('resize', updateWindowWidth);
+    });
+
+    const favoritesMediaIds = computed(() => {
+      return favoriteMovies.value?.map((item) => Number(item.movieId)) || [];
+    });
+    
+    const isFavorite = (mediaId) => {
+      return favoritesMediaIds.value.includes(Number(mediaId));
     };
+
+    const getSlidesPerView = computed(() => {
+      return windowWidth.value > 768 ? 2 : 1;
+    });
+
 
     return {
       getSlidesPerView,
       modules: [Navigation, Scrollbar, Autoplay, A11y],
-      openMediaDetails,
+      favoritesMediaIds,
+      isFavorite
     };
   },
 };

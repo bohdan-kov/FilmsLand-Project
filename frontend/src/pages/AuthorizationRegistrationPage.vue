@@ -141,6 +141,9 @@
                   <label v-if="!isPasswordConfigValid && inputPasswordConfigError" for="confirm_password" class="block text-sm text-[#ff00009e] mb-1">
                     {{ inputPasswordConfigError }}
                   </label>
+                  <label v-if="messageError" for="confirm_password" class="block text-sm text-[#ff00009e] mb-1">
+                    {{ messageError }}
+                  </label>
                 </div>
                 <button
                   @click.self.prevent="handleRegister"
@@ -242,6 +245,8 @@ export default {
     const inputUserNameError = ref("");
     const inputPasswordError = ref("");
     const inputPasswordConfigError = ref("");
+    
+    const messageError = ref("");
 
     const isEmailValid = computed(() => email.value.length > 3 && email.value.includes("@"));
     const isUserNameValid = computed(() => userName.value.length > 3);
@@ -274,11 +279,11 @@ export default {
           name: userName.value,
           password: password.value,
         };
-
         await register(formRegister);
 
         router.push('/authorization/login')
       } catch (error) {
+        messageError.value = error
         console.error(error);
       }
     };
@@ -297,6 +302,7 @@ export default {
        inputUserNameError,
        inputPasswordError, 
        inputPasswordConfigError, 
+       messageError,
        bgImage 
     };
   },

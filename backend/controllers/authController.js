@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const FavoriteMovie = require('../models/FavoriteMovie');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
@@ -53,9 +54,17 @@ exports.login = async (req, res) => {
 exports.getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.userId).select('-password');
-    res.json(user);
+    
+    const favoriteMovies = await FavoriteMovie.find({ userId: req.userId });
+    
+    const userProfile = {
+      ...user.toObject(),
+      favoriteMovies
+    };
+    
+    res.json(userProfile);
   } catch (err) {
-    res.status(500).json({ message: 'Помилка отримання профілю' });
+    res.status(500).json({ message: 'Помилка отримання профілю', error: err.message });
   }
 };
 
@@ -80,7 +89,6 @@ exports.uploadPhoto = [
     }
   }
 ];
-
 
 exports.getPhoto = async (req, res) => {
   try {

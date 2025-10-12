@@ -7,8 +7,9 @@ import { logout } from '@/utils/authLogout'
 export const useUserStore = defineStore('user', {
   state: () => ({
     name: null,
-    avatarUrl: null,
+    photo: null,
     isLoading: false,
+    favoriteMovies: [],
   }),
 
   actions: {
@@ -18,10 +19,13 @@ export const useUserStore = defineStore('user', {
         const token = localStorage.getItem("token")
         if (!token) return
         
-
         const user = await getProfile(token)
         this.name = user.name
-        this.avatarUrl = bufferToBase64Image(user.photo)
+        if (user?.photo?.data && user?.photo?.contentType) {
+          this.photo = bufferToBase64Image(user.photo.data, user.photo.contentType)
+        }
+        this.favoriteMovies = user.favoriteMovies
+
       } catch (error) {
         logout()
         console.error("Помилка при отриманні профілю:", error)
@@ -31,8 +35,18 @@ export const useUserStore = defineStore('user', {
     },
     resetUser(){
       this.name = null,
-      this.avatarUrl = null,
+      this.photo = null,
+      this.favoriteMovies = false,
       this.isLoading = false
-    }
+    },
+    addFavorite(movie) {
+      const exists = this.favoriteMovies.some(fav => +fav.movieId === +movie.movieId);
+      if (!exists) {
+        this.favoriteMovies.push(movie);
+      }
+    },
+    removeFavorite(movieId) {
+      this.favoriteMovies = this.favoriteMovies.filter(fav => +fav.movieId !== +movieId);
+    },
   }
 })

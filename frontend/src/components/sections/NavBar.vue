@@ -26,9 +26,9 @@
         <div v-if="userStore.name" class="nav__bar-authorized italic">
           Hi, {{ userStore.name }}
         </div>
-        <div v-if="userStore.avatarUrl" class="nav__bar-authorized relative">
+        <div v-if="userStore.photo" class="nav__bar-authorized relative">
           <img
-            :src="userStore.avatarUrl"
+            :src="userStore.photo"
             alt="Avatar"
             class="rounded-full w-[38px] h-[38px] object-cover shadow-2xl"
           />
