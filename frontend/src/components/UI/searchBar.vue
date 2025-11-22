@@ -117,6 +117,8 @@ const formattedRating = (film) => {
 };
 
 const handleBlur = () => {
+  searchValue.value = "";
+
   setTimeout(() => {
     searchActive.value = false;
   }, 200);
@@ -146,5 +148,20 @@ watch(searchValue, (newValue) => {
 
 .search-bar__input::placeholder {
   color: rgba(255, 255, 255, 0.5);
+}
+
+.search-bar__content {
+  scrollbar-width: thin;
+  scrollbar-color: #053ba3 #1c2331;
+}
+
+.search-bar__content::-webkit-scrollbar {
+  width: 8px;
+  background: #1c2331;
+}
+
+.search-bar__content::-webkit-scrollbar-thumb {
+  background: #053ba3;
+  border-radius: 8px;
 }
 </style>

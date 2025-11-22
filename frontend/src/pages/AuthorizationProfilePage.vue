@@ -46,7 +46,6 @@
                 />
               </g>
             </svg>
-            <!-- absolute bg-transparent text-transparent left-0 right-0 mx-auto -->
             <div
               class="profile__icon-inner w-[33px] h-[33px] p-[5px] bg-white/30 rounded-full absolute left-[10px] bottom-0 shadow-2xl"
             >
@@ -135,9 +134,8 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref, onMounted, watch } from "vue";
-
 import { useUserStore } from "@/stores/user";
 import { useRouter } from "vue-router";
 import { uploadPhoto } from "@/services/authService";
@@ -147,64 +145,50 @@ import HomeFooter from "@/components/sections/HomeFooter.vue";
 import bgImage from "@/assets/images/authorization-bg.jpg";
 import AppSlider from "@/components/sliders/AppSlider.vue";
 
-export default {
-  components: { HomeFooter, AppSlider },
-  setup() {
-    const router = useRouter();
-    const toast = useToast();
+const router = useRouter();
+const toast = useToast();
 
-    const selectedFile = ref(null);
-    const userStore = useUserStore();
+const selectedFile = ref(null);
+const userStore = useUserStore();
 
-    const uploadSelectedPhoto = async () => {
-      if (!selectedFile.value) return;
+const uploadSelectedPhoto = async () => {
+  if (!selectedFile.value) return;
 
-      try {
-        const token = localStorage.getItem("token");
-        await uploadPhoto(selectedFile.value, token);
-        toast.success("Фото успішно завантажено!", {
-          position: "bottom-right",
-          timeout: 3000,
-        });
-        userStore.fetchUser();
-      } catch (error) {
-        toast.error(`Помилка при завантаженні фото. ${error}`, {
-          position: "bottom-right",
-          timeout: 3000,
-        });
-        console.error("Помилка при завантаженні фото.", error);
-      }
-    };
-
-    const handleFileInput = (e) => {
-      selectedFile.value = e.target.files[0];
-    };
-
-    const logout = () => {
-      localStorage.removeItem("token");
-      localStorage.removeItem("id");
-      router.push("/authorization/login");
-      userStore.resetUser();
-    };
-
-    watch(selectedFile, (file) => {
-      if (file) uploadSelectedPhoto();
+  try {
+    const token = localStorage.getItem("token");
+    await uploadPhoto(selectedFile.value, token);
+    toast.success("Фото успішно завантажено!", {
+      position: "bottom-right",
+      timeout: 3000,
     });
-
-    onMounted(() => {
-      if (!userStore.name) {
-        userStore.fetchUser();
-      }
+    userStore.fetchUser();
+  } catch (error) {
+    toast.error(`Помилка при завантаженні фото. ${error}`, {
+      position: "bottom-right",
+      timeout: 3000,
     });
-
-    return {
-      bgImage,
-      selectedFile,
-      userStore,
-      handleFileInput,
-      logout,
-    };
-  },
+    console.error("Помилка при завантаженні фото.", error);
+  }
 };
+
+const handleFileInput = (e) => {
+  selectedFile.value = e.target.files[0];
+};
+
+const logout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("id");
+  router.push("/authorization/login");
+  userStore.resetUser();
+};
+
+watch(selectedFile, (file) => {
+  if (file) uploadSelectedPhoto();
+});
+
+onMounted(() => {
+  if (!userStore.name) {
+    userStore.fetchUser();
+  }
+});
 </script>
-<style scoped></style>

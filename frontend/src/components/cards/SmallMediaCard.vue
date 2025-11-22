@@ -128,6 +128,8 @@ export default {
         releaseDate: this.mediaReleaseDate,
         rating: this.formattedRating,
         posterUrl: this.mediaPoster,
+        genre_ids: this.item.genre_ids,
+        vote_count: this.item.vote_count
       };
       
       try {

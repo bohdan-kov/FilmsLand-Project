@@ -128,6 +128,8 @@ export default {
         releaseDate: this.item?.release_date || this.item?.first_air_date,
         rating: this.formattedRating(this.item),
         posterUrl: this.item.poster_path,
+        genre_ids: this.item.genre_ids,
+        vote_count: this.item.vote_count
       };
 
       try {
