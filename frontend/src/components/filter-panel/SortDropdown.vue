@@ -21,10 +21,10 @@
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
       >
-        <option value="original_title.asc">original_title.asc</option>
-        <option value="original_title.desc">original_title.desc</option>
-        <option value="popularity.asc">popularity.asc</option>
-        <option value="popularity.desc">popularity.desc</option>
+        <option value="original_title.asc">Title (A-Z)</option>
+        <option value="original_title.desc">Title (Z-A)</option>
+        <option value="popularity.asc">Popularity (Low to High)</option>
+        <option value="popularity.desc">Popularity (High to Low)</option>
       </select>
     </div>
   </div>

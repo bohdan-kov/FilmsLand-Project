@@ -21,7 +21,7 @@
       </ul>
     </nav>
     <div class="nav__bar-control flex gap-[32px]">
-      <img src="@/assets/images/icons/search.svg" alt="search-icon" />
+      <search-bar/>
       <router-link class="flex items-center gap-[16px]" to="/authorization/login">
         <div v-if="userStore.name" class="nav__bar-authorized italic">
           Hi, {{ userStore.name }}
@@ -101,6 +101,7 @@
 
 <script setup>
 import { useUserStore } from "@/stores/user";
+import searchBar from "../UI/searchBar.vue";
 
 const userStore = useUserStore();
 

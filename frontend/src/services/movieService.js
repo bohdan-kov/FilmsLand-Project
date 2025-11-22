@@ -1,9 +1,9 @@
-const API_BASE_URL = 'https://api.themoviedb.org/3';
+const API_BASE_URL = "https://api.themoviedb.org/3";
 const API_KEY = process.env.VUE_APP_TMDB_KEY; // Отримуємо ключ з .env
 
 const API_HEADERS = {
-  accept: 'application/json',
-  Authorization: `Bearer ${API_KEY}`
+  accept: "application/json",
+  Authorization: `Bearer ${API_KEY}`,
 };
 
 /**
@@ -14,18 +14,18 @@ const API_HEADERS = {
  */
 async function fetchData(path, params = {}) {
   const url = new URL(`${API_BASE_URL}/${path}`);
-  
+
   // Додаємо параметри до URL
   url.search = new URLSearchParams({
-    language: 'en-US',
+    language: "en-US",
     page: 1,
-    ...params
+    ...params,
   });
 
   try {
     const response = await fetch(url, {
-      method: 'GET',
-      headers: API_HEADERS
+      method: "GET",
+      headers: API_HEADERS,
     });
 
     if (!response.ok) {
@@ -35,32 +35,38 @@ async function fetchData(path, params = {}) {
     return await response.json();
   } catch (error) {
     console.error(`Помилка при отриманні даних (${path}):`, error);
-    throw new Error('Не вдалося завантажити дані');
+    throw new Error("Не вдалося завантажити дані");
   }
 }
 
 // Функції для отримання фільмів
-export const getUpcomingMovies = () => fetchData('movie/upcoming').then(data => data.results);
-export const getPopularMovies = () => fetchData('movie/popular').then(data => data.results);
-export const getPopularSeries = () => fetchData('tv/popular').then(data => data.results)
-export const getNowPlayingMovies = () => fetchData('movie/now_playing').then(data => data.results);
-export const getTrendingMovies = () => fetchData('trending/movie/day').then(data => data.results);
-export const getGenreMovies = () => fetchData('genre/movie/list').then(data => data.genres);
+export const getUpcomingMovies = () =>
+  fetchData("movie/upcoming").then((data) => data.results);
+export const getPopularMovies = () =>
+  fetchData("movie/popular").then((data) => data.results);
+export const getPopularSeries = () =>
+  fetchData("tv/popular").then((data) => data.results);
+export const getNowPlayingMovies = () =>
+  fetchData("movie/now_playing").then((data) => data.results);
+export const getTrendingMovies = () =>
+  fetchData("trending/movie/day").then((data) => data.results);
+export const getGenreMovies = () =>
+  fetchData("genre/movie/list").then((data) => data.genres);
 
 /**
  * Отримання списку фільмів із додатковими фільтрами
  * @param {object} filters - Об'єкт із фільтрами
  * @returns {Promise<any[]>}
  */
-export const getDiscoverMovies = (filters = {}) => 
-  fetchData('discover/movie', {
+export const getDiscoverMovies = (filters = {}) =>
+  fetchData("discover/movie", {
     include_adult: false,
     include_video: false,
-    sort_by: 'popularity.desc',
-    ...filters
-  }).then(data => ({
+    sort_by: "popularity.desc",
+    ...filters,
+  }).then((data) => ({
     response: data.results,
-    total_pages: data.total_pages
+    total_pages: data.total_pages,
   }));
 
 /**
@@ -68,5 +74,13 @@ export const getDiscoverMovies = (filters = {}) =>
  * @param {object} movie_id - Число з ідентифікатором фільму
  * @returns {Promise<any[]>}
  */
-export const getDetailsMovies = (movie_id) => 
-  fetchData(`movie/${movie_id}`).then(data => data);
+export const getDetailsMovies = (movie_id) =>
+  fetchData(`movie/${movie_id}`).then((data) => data);
+
+/**
+ * Пошук фільмів за запитом
+ * @param {string} query - Пошуковий запит
+ * @returns {Promise<object>} Об'єкт з результатами пошуку
+ */
+export const searchMovies = (query) =>
+  fetchData(`search/movie`, { query: query }).then((data) => data);

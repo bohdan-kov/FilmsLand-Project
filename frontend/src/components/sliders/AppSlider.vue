@@ -12,16 +12,19 @@
       :slides-per-view="getSlidesPerView"
       :space-between="20"
       :loop="false"
-      :navigation="{ nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }"
+      :navigation="{
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      }"
       :pagination="{ el: '.swiper-steps', clickable: true }"
       :scrollbar="{ draggable: true }"
       class="app__slider-inner"
     >
       <swiper-slide v-for="(item, index) in filmsData" :key="index">
-        <small-media-card 
-          class="my-[10px]" 
-          :item="item" 
-          :is-favorite="isFavorite(item.id || item.movieId)" 
+        <small-media-card
+          class="my-[10px]"
+          :item="item"
+          :is-favorite="isFavorite(item.id || item.movieId)"
         />
       </swiper-slide>
 
@@ -43,7 +46,13 @@ import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/user";
 
 import { Swiper, SwiperSlide } from "swiper/vue";
-import { Navigation, Pagination, Scrollbar, Autoplay, A11y } from "swiper/modules";
+import {
+  Navigation,
+  Pagination,
+  Scrollbar,
+  Autoplay,
+  A11y,
+} from "swiper/modules";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css";
@@ -78,39 +87,50 @@ export default {
   setup(props) {
     const userStore = useUserStore();
     const { favoriteMovies } = storeToRefs(userStore);
-    
+
     const windowWidth = ref(window.innerWidth);
-    
+
     const updateWindowWidth = () => {
       windowWidth.value = window.innerWidth;
     };
-    
+
     onMounted(() => {
       window.addEventListener("resize", updateWindowWidth);
     });
-    
+
     onUnmounted(() => {
       window.removeEventListener("resize", updateWindowWidth);
     });
-    
+
     const favoritesMediaIds = computed(() => {
       return favoriteMovies.value?.map((item) => Number(item.movieId)) || [];
     });
-    
+
     const isFavorite = (mediaId) => {
       return favoritesMediaIds.value.includes(Number(mediaId));
     };
-    
+
     const getSlidesPerView = computed(() => {
-      const width = windowWidth.value - props.paddingSlider;
-      return width > 1500 ? 5 : width > 1150 ? 4 : width > 850 ? 3 : width > 570 ? 2 : 1;
+      const maxContentWidth = 1480;
+      const actualWidth = Math.min(windowWidth.value, maxContentWidth);
+      const width = actualWidth - props.paddingSlider;
+
+      return width >= 1480
+        ? 5
+        : width > 1150
+        ? 4
+        : width > 850
+        ? 3
+        : width > 570
+        ? 2
+        : 1;
     });
-    
+
     return {
       getSlidesPerView,
       modules: [Navigation, Pagination, Scrollbar, Autoplay, A11y],
       favoritesMediaIds,
-      isFavorite
+      isFavorite,
     };
   },
 };

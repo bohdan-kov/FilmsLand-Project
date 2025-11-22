@@ -14,19 +14,28 @@
           <div class="media__details-poster">
             <img
               class="max-w-[300px] rounded-[10px] shadow-lg"
-              :src="'https://image.tmdb.org/t/p/original' + detailsFilmsData.poster_path"
+              :src="
+                'https://image.tmdb.org/t/p/original' +
+                detailsFilmsData.poster_path
+              "
               alt=""
             />
           </div>
           <div class="media__details-desc pt-[20px] w-full">
             <div class="media__details-header flex items-center gap-[10px]">
-              <h3 class="media__details-title font-contrast text-4xl font-normal inline">
+              <h3
+                class="media__details-title font-contrast text-4xl font-normal inline"
+              >
                 {{ detailsFilmsData.title }}
               </h3>
-              <span class="media__details-year text-3xl  font-thin"
+              <span class="media__details-year text-3xl font-thin"
                 >({{ getReleaseYear }})</span
               >
-              <a class="media__details-link" :href="'https://www.imdb.com/title/' + detailsFilmsData.imdb_id" target="_blank">
+              <a
+                class="media__details-link"
+                :href="'https://www.imdb.com/title/' + detailsFilmsData.imdb_id"
+                target="_blank"
+              >
                 <svg
                   class="media__details-imdb pl-[10px]"
                   xmlns="http://www.w3.org/2000/svg"
@@ -77,7 +86,9 @@
                 >
                   <p class="media__details-genre inline]">
                     {{ item.name
-                    }}{{ detailsFilmsData.genres.length > index + 1 ? "," : "" }}
+                    }}{{
+                      detailsFilmsData.genres.length > index + 1 ? "," : ""
+                    }}
                   </p>
                 </li>
                 <span
@@ -100,17 +111,19 @@
                   :show-rating="false"
                 />
               </div>
-              <div 
+              <div
                 v-if="detailsFilmsData.budget"
                 class="media-details-budget text-[13px] mt-[10px]"
               >
-                💰Budget: {{  (detailsFilmsData.budget / 1_000_000).toFixed(2) }} Mln $
+                💰Budget:
+                {{ (detailsFilmsData.budget / 1_000_000).toFixed(2) }} Mln $
               </div>
-              <div 
+              <div
                 v-if="detailsFilmsData.revenue"
                 class="media-details-budget text-[13px] mt-[10px]"
               >
-                📈Revenue: {{ (detailsFilmsData.revenue / 1_000_000).toFixed(2) }} Mln $
+                📈Revenue:
+                {{ (detailsFilmsData.revenue / 1_000_000).toFixed(2) }} Mln $
               </div>
               <div
                 class="media-details-tagline mt-[30px] font-normal italic opacity-70 underline"
@@ -118,12 +131,14 @@
                 {{ detailsFilmsData.tagline }}
               </div>
 
-              <div class="media-details-overview mt-[10px] max-w-[800px] mb-[30px]">
+              <div
+                class="media-details-overview mt-[10px] max-w-[800px] mb-[30px]"
+              >
                 <span class="block font-bold mb-[5px]">Overview</span>
                 {{ detailsFilmsData.overview }}
               </div>
 
-              <button-prev 
+              <button-prev
                 @click="backPage"
                 class="transition-all duration-300 hover:-translate-x-[10px]"
               />
@@ -136,65 +151,57 @@
   </div>
 </template>
 
-<script>
-import { ref, computed } from "vue";
+<script setup>
+import { ref, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { getDetailsMovies } from "@/services/movieService";
 
 import HomeFooter from "@/components/sections/HomeFooter.vue";
 import StarRating from "vue-star-rating";
-
 import buttonPrev from "@/components/UI/buttonPrev";
 
+const router = useRouter();
+const route = useRoute();
 
-export default {
-  components: { HomeFooter, StarRating, buttonPrev },
-  setup() {
-    const router = useRouter();
-    const route = useRoute();
+const detailsFilmsData = ref({});
 
-    const detailsFilmsData = ref({});
+const movieId = computed(() => route.params.id);
 
-    const movieId = route.params.id;
+const getReleaseYear = computed(() => {
+  return detailsFilmsData.value.release_date
+    ? detailsFilmsData.value.release_date.split("-")[0]
+    : "In release";
+});
 
+const getDurationMedia = computed(() => {
+  const runtime = detailsFilmsData.value.runtime;
+  if (!runtime) return "-";
+  return `${Math.floor(runtime / 60)}h ${runtime % 60}m`;
+});
 
-    const getReleaseYear = computed(() => {
-      return detailsFilmsData.value.release_date
-        ? detailsFilmsData.value.release_date.split("-")[0]
-        : "In release";
-    });
-
-    const getDurationMedia = computed(() => {
-      const runtime = detailsFilmsData.value.runtime;
-      if (!runtime) return "-";
-      return `${Math.floor(runtime / 60)}h ${runtime % 60}m`;
-    });
-
-    const fetchAPI = async (fetchFunction, targetData) => {
-      try {
-        const response = await fetchFunction(movieId);
-
-        targetData.value = response;
-      } catch (error) {
-        console.error(`Error fetching ${targetData}:`, error);
-      }
-    };
-
-    const backPage = () => {
-      router.back()
-    }
- 
-    fetchAPI(getDetailsMovies, detailsFilmsData);
-
-    return {
-      detailsFilmsData,
-      getReleaseYear,
-      getDurationMedia,
-      backPage
-    };
-  },
+const loadMovieDetails = async (id) => {
+  try {
+    const response = await getDetailsMovies(id);
+    detailsFilmsData.value = response;
+  } catch (error) {
+    console.error("Error fetching movie details:", error);
+  }
 };
+
+const backPage = () => {
+  router.back();
+};
+
+watch(
+  movieId,
+  (newId) => {
+    if (newId) {
+      loadMovieDetails(newId);
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <style scoped></style>
