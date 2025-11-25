@@ -1,5 +1,5 @@
 <template>
-  <div class="media-listCard__inner flex flex-wrap gap-[32px]">
+  <div class="media-listCard__inner flex flex-wrap justify-around lg:justify-start gap-[32px]">
     <div v-for="(media, index) in mediaDate" class="media-listCard__item" :key="index">
       <media-card :item="media" :is-favorite="isFavorite(media.id || media.movieId)" />
     </div>

@@ -3,7 +3,7 @@
     <!-- {{ currentPage }} -->
     <!-- {{ totalPages }} -->
     <button
-      class="pagination-nav__first pagination-nav__btn border border-[rgb(41,37,36)] disabled:opacity-50 rounded-[5px] w-[36px] h-[36px] flex justify-center items-center"
+      class="pagination-nav__first pagination-nav__btn border border-[rgb(41,37,36)] disabled:opacity-50 rounded-[5px] w-[26px] h-[26px] flex justify-center items-center"
       :disabled="currentPage === 1"
       @click="$emit('onChangePage', 1)"
     >
@@ -24,7 +24,7 @@
       </svg>
     </button>
     <button
-      class="pagination-nav__prev pagination-nav__btn border border-[rgb(41,37,36)] disabled:opacity-50 rounded-[5px] w-[36px] h-[36px] flex justify-center items-center"
+      class="pagination-nav__prev pagination-nav__btn border border-[rgb(41,37,36)] disabled:opacity-50 rounded-[5px] w-[26px] h-[26px] flex justify-center items-center"
       :disabled="currentPage === 1"
       @click="$emit('onChangePage', currentPage - 1)"
     >
@@ -47,7 +47,7 @@
     <ul class="pagination-nav__list flex gap-[10px]">
       <div v-if="currentPage >= 5" class="flex gap-[10px]">
         <button
-          class="pagination-nav__btn border border-[rgb(41,37,36)] rounded-[5px] w-[36px] h-[36px]"
+          class="pagination-nav__btn border border-[rgb(41,37,36)] rounded-[5px] w-[26px] h-[26px]"
           @click="$emit('onChangePage', 1)"
         >
           1
@@ -78,7 +78,7 @@
       >
         <button
           :class="{ 'pagination-nav__btn--active !bg-[#053ba3]': currentPage === item }"
-          class="pagination-nav__btn border border-[rgb(41,37,36)] rounded-[5px] w-[36px] h-[36px]"
+          class="pagination-nav__btn border border-[rgb(41,37,36)] rounded-[5px] w-[26px] h-[26px]"
           @click="$emit('onChangePage', item)"
         >
           {{ item }}
@@ -104,7 +104,7 @@
           </svg>
         </div>
         <button
-          class="pagination-nav__btn border border-[rgb(41,37,36)] rounded-[5px] w-[36px] h-[36px]"
+          class="pagination-nav__btn border border-[rgb(41,37,36)] rounded-[5px] w-[26px] h-[26px]"
           @click="$emit('onChangePage', totalPages)"
         >
           {{ totalPages }}
@@ -113,7 +113,7 @@
     </ul>
 
     <button
-      class="pagination-nav__next pagination-nav__btn border border-[rgb(41,37,36)] disabled:opacity-50 rounded-[5px] w-[36px] h-[36px] flex justify-center items-center"
+      class="pagination-nav__next pagination-nav__btn border border-[rgb(41,37,36)] disabled:opacity-50 rounded-[5px] w-[26px] h-[26px] flex justify-center items-center"
       :disabled="currentPage === totalPages"
       @click="$emit('onChangePage', currentPage + 1)"
     >
@@ -134,7 +134,7 @@
     </button>
 
     <button
-      class="pagination-nav__first pagination-nav__btn border border-[rgb(41,37,36)] disabled:opacity-50 rounded-[5px] w-[36px] h-[36px] flex justify-center items-center"
+      class="pagination-nav__first pagination-nav__btn border border-[rgb(41,37,36)] disabled:opacity-50 rounded-[5px] w-[26px] h-[26px] flex justify-center items-center"
       :disabled="currentPage === totalPages"
       @click="$emit('onChangePage', totalPages)"
     >

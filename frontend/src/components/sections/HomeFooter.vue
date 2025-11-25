@@ -1,6 +1,6 @@
 <template>
   <footer class="home__footer-inner pt-[36px] pb-[33px]">
-    <div class="home__footer-box flex justify-between mb-[100px]">
+    <div class="home__footer-box flex  flex-col md:flex-row justify-between mb-[100px]">
       <div class="home__footer-social">
         <p class="footer__social-text text-[18px] uppercase mb-[32px]">Connect with us</p>
         <ul class="footer__social-list flex gap-[12px]">
@@ -18,7 +18,7 @@
           </li>
         </ul>
       </div>
-      <nav class="home__footer-nav flex gap-[70px] mt-[12px] text-[17px]">
+      <nav class="home__footer-nav flex gap-[20px] mt-[12px] text-[17px]">
         <ul class="footer__support-list space-y-[21px]">
           <li class="footer__support-item cursor-pointer">Jobs</li>
           <li class="footer__support-item cursor-pointer">Cookies and Preferences</li>

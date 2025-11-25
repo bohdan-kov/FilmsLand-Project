@@ -8,8 +8,8 @@
           {{ pageTitle }}
         </h2>
 
-        <div class="media-list-box flex gap-[30px]">
-          <div class="media-list-filters min-w-[260px] max-w-[260px] flex flex-col gap-3">
+        <div class="media-list-box flex flex-col lg:flex-row gap-[30px]">
+          <div class="media-list-filters lg:min-w-[260px] lg:max-w-[260px] flex flex-col gap-3">
             <sort-dropdown v-model="filters.sort_by" />
             <filters-dropdown v-model="filters" :genreListsData="genreListsData" />
           </div>

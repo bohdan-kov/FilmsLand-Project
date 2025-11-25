@@ -1,5 +1,5 @@
 <template>
-  <ul class="movies__category-list max-w-[150px]">
+  <ul class="movies__category-list w-full  md:max-w-[150px]">
     <li
       v-for="(genre, index) in genreData"
       :key="index"

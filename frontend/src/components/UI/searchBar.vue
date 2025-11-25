@@ -1,6 +1,6 @@
 <template>
   <div
-    class="search-bar__inner relative flex bg-[#1C2331] px-[10px] rounded-[8px] transition-all duration-150"
+    class="search-bar__inner md:absolute md:right-[64px] flex bg-[#1C2331] px-[10px] rounded-[8px] transition-all duration-150"
   >
     <div class="search-bar__control flex items-center justify-between">
       <img
@@ -67,7 +67,7 @@
 
 <script setup>
 import { searchMovies } from "@/services/movieService";
-import { ref, nextTick, watch } from "vue";
+import { ref, nextTick, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -76,10 +76,19 @@ const searchActive = ref(false);
 const searchInput = ref(null);
 const searchResults = ref([]);
 const isLoading = ref(false);
+const windowWidth = ref(window.innerWidth);
 
 let debounceTimer = null;
 
+const updateWidth = () => {
+  windowWidth.value = window.innerWidth;
+};
+
 const toggleSearch = () => {
+
+  if (windowWidth.value <= 767) {
+    return;
+  }
   searchActive.value = !searchActive.value;
   if (searchActive.value) {
     nextTick(() => {
@@ -87,6 +96,21 @@ const toggleSearch = () => {
     });
   }
 };
+
+onMounted(() => {
+  window.addEventListener('resize', updateWidth);
+  if (windowWidth.value <= 767) {
+    searchActive.value = true;
+  }
+});
+
+watch(windowWidth, (newWidth) => {
+  if (newWidth <= 767) {
+    searchActive.value = true;
+  } else {
+    searchActive.value = false;
+  }
+});
 
 const performSearch = async (query) => {
   if (query.length < 2) {
@@ -118,6 +142,10 @@ const formattedRating = (film) => {
 
 const handleBlur = () => {
   searchValue.value = "";
+
+  if (windowWidth.value <= 767) {
+    return;
+  }
 
   setTimeout(() => {
     searchActive.value = false;

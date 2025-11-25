@@ -15,7 +15,7 @@
 
     <div
       v-show="isOpenFilter"
-      class="filters-dropdown__items py-[14px] rounded-b-[15px] bg-[#1C2331]"
+      class="filters-dropdown__items flex flex-row flex-wrap lg:flex-col py-[14px] rounded-b-[15px] bg-[#1C2331]"
     >
       <div
         class="filters-dropdown__item px-[16px] py-[14px] border-b-[2px] border-[#12192C]"

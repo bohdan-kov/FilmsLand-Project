@@ -7,13 +7,13 @@
         Search movies by category
       </h3>
     </div>
-    <div class="category__content flex gap-[45px]">
+    <div class="category__content flex flex-col md:flex-row gap-[45px]">
       <movies-category-list :genreData="genreListsData" @changeGenre="changeGenre" />
-      <div class="category__content-box w-[calc(100%-200px)] mt-[45px]">
+      <div class="category__content-box md:w-[calc(100%-200px)] mt-[45px]">
         <h4 class="category__content-title font-heading text-[25px] mb-[15px]">
           {{ titleFilms }} Films
         </h4>
-        <p class="category__content-desc mb-[55px]">
+        <p class="category__content-desc mb-[55px] hidden md:block">
           {{ genreFilmsDesc}}
         </p>
         <app-slider :title="null" :filmsData="genreFilmsData" :paddingSlider="200" />

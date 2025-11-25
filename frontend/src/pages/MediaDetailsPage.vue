@@ -9,9 +9,9 @@
     <div class="media__details-wrapper">
       <div class="page__container">
         <div
-          class="media__details-box absolute flex gap-[40px] max-w-[1500px] top-0 pt-[100px] left-0 right-0 mx-auto px-[15px]"
+          class="media__details-box absolute flex flex-col md:flex-row gap-[40px] max-w-[1500px] top-0 pt-[100px] left-0 right-0 mx-auto px-[15px]"
         >
-          <div class="media__details-poster">
+          <div class="media__details-poster self-center md:self-start">
             <img
               class="max-w-[300px] rounded-[10px] shadow-lg"
               :src="
@@ -21,8 +21,8 @@
               alt=""
             />
           </div>
-          <div class="media__details-desc pt-[20px] w-full">
-            <div class="media__details-header flex items-center gap-[10px]">
+          <div class="media__details-desc pt-[20px] flex flex-col items-center md:items-start w-full">
+            <div class="media__details-header flex items-center gap-[10px] mb-3">
               <h3
                 class="media__details-title font-contrast text-4xl font-normal inline"
               >
@@ -66,15 +66,17 @@
                 </svg>
               </a>
             </div>
-            <div class="media__details-meta flex items-center gap-[10px]">
-              <p
-                class="media__details-age border border-white/60 text-white/60 inline py-[2px] px-[5px] rounded-[2px]"
-              >
-                {{ detailsFilmsData.adult ? "18+" : "Age Free" }}
-              </p>
-              <p class="media__details-release inline">
-                {{ detailsFilmsData.release_date }}
-              </p>
+            <div class="media__details-meta flex flex-col md:flex-row items-center gap-[10px]">
+              <div class="media__details-release-age-wrapper flex flex-row gap-[10px] items-center">
+                <p
+                  class="media__details-age border border-white/60 text-white/60 inline py-[2px] px-[5px] rounded-[2px]"
+                >
+                  {{ detailsFilmsData.adult ? "18+" : "Age Free" }}
+                </p>
+                <p class="media__details-release inline">
+                  {{ detailsFilmsData.release_date }}
+                </p>
+              </div>
               <ul class="media__details-list-genre flex gap-[8px] items-center">
                 <span
                   class="media__details-list-circle w-[5px] h-[5px] bg-white rounded-full"
@@ -99,10 +101,10 @@
                 {{ getDurationMedia }}
               </div>
             </div>
-            <div class="media__details-main">
+            <div class="media__details-main flex flex-col items-center md:items-start">
               <div class="media-details-rating">
                 <star-rating
-                  :star-size="20"
+                  :star-size="30"
                   :rating="detailsFilmsData.vote_average / 2"
                   :increment="0.01"
                   :read-only="true"
@@ -140,7 +142,7 @@
 
               <button-prev
                 @click="backPage"
-                class="transition-all duration-300 hover:-translate-x-[10px]"
+                class="transition-all duration-300 self-start hover:-translate-x-[10px]"
               />
             </div>
           </div>
